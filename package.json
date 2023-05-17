@@ -1,0 +1,25 @@
+{
+  "name": "trying-out-scoket.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "devStart" : "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nemene21/trying-out-scoket.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nemene21/trying-out-scoket.io/issues"
+  },
+  "homepage": "https://github.com/nemene21/trying-out-scoket.io#readme",
+  "dependencies": {
+    "socket.io": "^4.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
