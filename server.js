@@ -5,5 +5,5 @@ const io = require("socket.io")(PORT, {
 
 io.on("connection", function(socket) {
     console.log("new user!");
-    socket.broadcaster
+    socket.broadcast.emit("player_joined")
 })
