@@ -3,10 +3,6 @@ const username = "test" // prompt("Ime (kajgod):")
 const socket = io("http://localhost:3000", { transports : ['websocket'] });
 const FPS = 90
 
-socket.on("player_joined", function(message) {
-    console.log("woo new player wow wow woooow!")
-})
-
 let fps_counter = document.getElementById("fps_counter")
 
 let canvas = document.getElementById("display")
@@ -82,21 +78,17 @@ y = window_h / 2
 const GRAVITY = 1600
 const JUMPHEIGHT = 800
 
-when_pressed(["ArrowUp", "w"], function() {
-    vel[1] = -JUMPHEIGHT
-})
-
 function process() {
 
-    for (let i = 0; i < players.length; i++) {
-        players[i].process()
+    for (let player in players) {
+        players[player].process()
     }
 }
 
 function draw() {
     
-    for (let i = 0; i < players.length; i++) {
-        players[i].draw()
+    for (let player in players) {
+        players[player].draw()
     }
 }
 
@@ -119,6 +111,16 @@ class Player {
     }
 }
 
-let local_player = Player(Math.random() * window_w, Math.random() * window_h, "rgb(255, 255, 255)")
+let local_player
 
-let players = [local_player]
+socket.on("create_local_player", function(data) {
+    local_player = new Player(Math.random() * window_w, Math.random() * window_h, "rgb(0, 255, 0)")
+    players[socket.id] = local_player
+    socket.emit("local_player_created", local_player)
+})
+
+socket.on("player_joined", function(data) {
+    players[data.id] = data.player
+})
+
+let players = {}
