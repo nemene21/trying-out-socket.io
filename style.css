@@ -6,6 +6,14 @@ body {
     overflow: hidden;
 }
 
+#fps_counter {
+    position: absolute;
+    top: 0px; left: 12px;
+
+    color: black;
+    font-weight: 1500;
+}
+
 #display {
     position: absolute;
     left: 50%; top: 50%;
