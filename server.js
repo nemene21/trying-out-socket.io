@@ -4,12 +4,18 @@ const io = require("socket.io")(PORT, {
 })
 
 let players = {}
+let num_players = 0
 let particles = []
+const PLAYER_COLORS = [
+    "#e83b3b", "#0eaf9b", "#1ebc73", "#fb6b1d", "#905ea9", "#f9c22b"
+]
 
 io.on("connection", function(socket) {
     console.log("new user!")
+    socket.emit("create_local_player", PLAYER_COLORS[num_players])
     socket.emit("sync_other_players", JSON.stringify(players))
-    socket.emit("create_local_player")
+
+    num_players += 1
 
     socket.on("local_player_created", function(data) {
         data.id = socket.id
@@ -27,7 +33,12 @@ io.on("connection", function(socket) {
         particles.push(JSON.parse(particle))
     })
 
+    socket.on("play_sound", function(sound) {
+        socket.broadcast.emit("play_external_sound", sound)
+    })
+
     socket.on("disconnect", function() {
+        num_players -= 1
         console.log("user left!")
         io.emit("player_left", socket.id)
         delete(players[socket.id])

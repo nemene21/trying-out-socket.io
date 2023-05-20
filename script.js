@@ -105,7 +105,7 @@ function play_sound(path, pitch, pitch_random) {
     audio.mozPreservesPitch = false;
     audio.playbackspeed = pitch + (Math.random() * 2 - 1) * pitch_random
     audio.play();
-    socket.broadcast.emit("play_external_sound", {path: path, pitch: pitch, pitch_random: pitch_random})
+    socket.emit("play_sound", {path: path, pitch: pitch, pitch_random: pitch_random})
 }
 
 socket.on("play_external_sound", function() {
@@ -247,8 +247,9 @@ socket.on("update_player", function(data) {
     players[data.id].color = data.color
 })
 
-socket.on("create_local_player", function(data) {
-    local_player = new Player(Math.random() * window_w, Math.random() * window_h, color(Math.random() * 255, Math.random() * 255, Math.random() * 255, 255))
+socket.on("create_local_player", function(color) {
+    players = {}
+    local_player = new Player(Math.random() * window_w, Math.random() * window_h, color)
     players[socket.id] = local_player
     socket.emit("local_player_created", {x: local_player.x, y: local_player.y, color: local_player.color})
 })
