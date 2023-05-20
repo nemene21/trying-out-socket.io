@@ -78,21 +78,41 @@ let particles = []
 function draw_particles() {
     for (let i = 0; i < particles.length; i++) {
         let particle = particles[i]
-        circle(particle.x, particle.y, particle.r, particle.color)
+        let scale = particle.lf / particle.start_lf
+        circle(particle.x, particle.y, particle.r * scale, particle.color)
     }
 }
 
-function spawn_particle(x, y, r, color) {
+function spawn_particle(x, y, r, lf, color, vel={x: 0, y: 0}) {
     let particle = {
         x: x, y: y, r: r,
-        color: color
+        lf: lf,
+        start_lf: lf,
+        color: color,
+        vel: vel
     }
-    
+
     socket.emit("spawn_particle", JSON.stringify(particle))
 }
 
 socket.on("update_particles", function(particle_data) {
     particles = JSON.parse(particle_data)
+})
+
+// Sounds
+function play_sound(path, pitch, pitch_random) {
+    var audio = new Audio(path);
+    audio.mozPreservesPitch = false;
+    audio.playbackspeed = pitch + (Math.random() * 2 - 1) * pitch_random
+    audio.play();
+    socket.broadcast.emit("play_external_sound", {path: path, pitch: pitch, pitch_random: pitch_random})
+}
+
+socket.on("play_external_sound", function() {
+    var audio = new Audio(path);
+    audio.mozPreservesPitch = false;
+    audio.playbackspeed = pitch + (Math.random() * 2 - 1) * pitch_random
+    audio.play();
 })
 
 // Game logic
@@ -133,7 +153,8 @@ class Player {
         this.x = x; this.y = y
         this.color = color
         this.scale = 1
-        this.vel = {x: 200, y: 0}
+        this.vel = {x: 250, y: 0}
+        this.particle_timer = 0.02
 
         this.lerp_x = x; this.lerp_y = y
         this.lerp_scale = 1
@@ -147,14 +168,25 @@ class Player {
         this.x += this.vel.x * delta
         this.y += this.vel.y * delta
 
+        this.particle_timer -= delta
+        if (this.particle_timer < 0) {
+            spawn_particle(
+                this.x + (Math.random() * 2 - 1) * 12,
+                this.y + (Math.random() * 2 - 1) * 12,
+                4 + Math.random() * 4,
+                0.5 * Math.random() + 0.1,
+                this.color,
+                {x: this.vel.x * 0.1, y: this.vel.y * 0.1}
+            )
+            this.particle_timer = 0.05
+        }
+
         if (this.x < 0) {
             this.x = 0
-            this.vel.x *= -1
-            this.scale = 1.5
+            this.bounce()
         } else if (this.x > window_w) {
             this.x = 1024
-            this.vel.x *= -1
-            this.scale = 1.5
+            this.bounce()
         }
 
         if (this.y > window_h) {this.y = window_h}
@@ -162,8 +194,21 @@ class Player {
         socket.emit("send_player_data", JSON.stringify({
             x: this.x, y: this.y,
             scale: this.scale,
+            color: this.color,
             id: socket.id
         }))
+    }
+
+    bounce() {
+        this.vel.x *= -1
+        this.scale = 1.5
+        for (let i = 0; i < 7; i++) {
+            spawn_particle(local_player.x, local_player.y, Math.random() * 20 + 15, Math.random() * 0.2 + 0.2, local_player.color, {
+                x: (Math.random() * 2 - 1) * 200,
+                y: (Math.random() * 2 - 1) * 200
+            })
+        }
+        play_sound("sounds/bounce.wav", 0.1, 0.4)
     }
 
     sync() {
@@ -178,7 +223,18 @@ class Player {
 }
 
 when_pressed(["w", "ArrowUp"], function() {
+    if (local_player.vel.y < -JUMPHEIGHT * 0.8) return
+
     local_player.vel.y = -JUMPHEIGHT
+
+    play_sound("sounds/jump.wav", 0.2)
+
+    for (let i = 0; i < 5; i++) {
+        spawn_particle(local_player.x, local_player.y, Math.random() * 15 + 10, Math.random() * 0.2 + 0.2, local_player.color, {
+            x: (Math.random() * 2 - 1) * 160,
+            y: (Math.random() * 2 - 1) * 160
+        })
+    }
 })
 
 let local_player
@@ -188,24 +244,25 @@ socket.on("update_player", function(data) {
     players[data.id].lerp_x = data.x
     players[data.id].lerp_y = data.y
     players[data.id].lerp_scale = data.scale
+    players[data.id].color = data.color
 })
 
 socket.on("create_local_player", function(data) {
-    local_player = new Player(Math.random() * window_w, Math.random() * window_h, "rgb(0, 255, 0)")
+    local_player = new Player(Math.random() * window_w, Math.random() * window_h, color(Math.random() * 255, Math.random() * 255, Math.random() * 255, 255))
     players[socket.id] = local_player
-    socket.emit("local_player_created", {x: local_player.x, y: local_player.y})
+    socket.emit("local_player_created", {x: local_player.x, y: local_player.y, color: local_player.color})
 })
 
 socket.on("sync_other_players", function(data) {
     data = JSON.parse(data)
     for (let i in data) {
         let new_player = data[i]
-        players[new_player.id] = new Player(new_player.x, new_player.y, "rgb(255, 0, 0)")
+        players[new_player.id] = new Player(new_player.x, new_player.y, new_player.color)
     }
 })
 
 socket.on("player_joined", function(data) {
-    players[data.id] = new Player(data.x, data.y, "rgb(255, 0, 0)")
+    players[data.id] = new Player(data.x, data.y, data.color)
     console.log("new guy joined!")
 })
 
