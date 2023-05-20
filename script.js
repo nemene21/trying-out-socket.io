@@ -80,9 +80,7 @@ const JUMPHEIGHT = 800
 
 function process() {
 
-    for (let player in players) {
-        players[player].process()
-    }
+    players[socket.id].process()
 }
 
 function draw() {
@@ -100,10 +98,26 @@ class Player {
         this.x = x; this.y = y
         this.color = color
         this.scale = 1
+        this.vel = {x: 200, y: 0}
     }
 
     process() {
+        this.x += this.vel.x * delta
+        this.y += this.vel.y * delta
 
+        if (this.x < 0) {
+            this.x = 0
+            this.vel.x *= -1
+        } else if (this.x > window_w) {
+            this.x = 1024
+            this.vel.x *= -1
+        }
+
+        socket.emit("send_player_data", {
+            x: this.x, y: this.y,
+
+            id: socket.id
+        })
     }
 
     draw() {
@@ -113,14 +127,33 @@ class Player {
 
 let local_player
 
+socket.on("update_player", function(data) {
+    players[data.id].x = data.x
+    players[data.id].y = data.y
+})
+
 socket.on("create_local_player", function(data) {
     local_player = new Player(Math.random() * window_w, Math.random() * window_h, "rgb(0, 255, 0)")
     players[socket.id] = local_player
-    socket.emit("local_player_created", local_player)
+    socket.emit("local_player_created", {x: local_player.x, y: local_player.y})
+})
+
+socket.on("sync_other_players", function(data) {
+    data = JSON.parse(data)
+    for (let i in data) {
+        let new_player = data[i]
+        players[new_player.id] = new Player(new_player.x, new_player.y, "rgb(255, 0, 0)")
+    }
 })
 
 socket.on("player_joined", function(data) {
-    players[data.id] = data.player
+    players[data.id] = new Player(data.x, data.y, "rgb(255, 0, 0)")
+    console.log("new guy joined!")
+})
+
+socket.on("player_left", function(id) {
+    delete(players[id])
+    console.log("guy left :(")
 })
 
 let players = {}
