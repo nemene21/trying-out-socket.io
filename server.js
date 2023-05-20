@@ -4,6 +4,7 @@ const io = require("socket.io")(PORT, {
 })
 
 let players = {}
+let particles = []
 
 io.on("connection", function(socket) {
     console.log("new user!")

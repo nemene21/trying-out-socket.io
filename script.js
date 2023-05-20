@@ -22,7 +22,12 @@ function calculate_delta() {
     last_time = now
 
     delta =  diff * 0.001
+    if (delta > 0.1) {
+        delta = 0.1
+    }
 }
+
+function lerp(a, b, c) {return a + (b - a) * c}
 
 function step() {
     calculate_delta()
@@ -30,7 +35,7 @@ function step() {
 
     fps_counter.textContent = "FPS: " + Math.round(1 / delta)
 
-    clear(color(0, 0, 0, delta * 10))
+    clear(color(0, 0, 0, delta * 20))
     process()
     draw()
 }
@@ -66,11 +71,33 @@ function clear(color="black") {
 
 function color(r, g, b, a = 1) {
     return "rgba(" + r + "," + g + "," + b + "," + a + ")"
-} 
+}
 
-setInterval(step, 1000 / FPS)
+// Particles
+let particles = []
+function draw_particles() {
+    for (let i = 0; i < particles.length; i++) {
+        let particle = particles[i]
+        circle(particle.x, particle.y, particle.r, particle.color)
+    }
+}
+
+function spawn_particle(x, y, r, color) {
+    let particle = {
+        x: x, y: y, r: r,
+        color: color
+    }
+    
+    socket.emit("spawn_particle", JSON.stringify(particle))
+}
+
+socket.on("update_particles", function(particle_data) {
+    particles = JSON.parse(particle_data)
+})
 
 // Game logic
+setInterval(step, 1000 / FPS)
+
 let x, y
 x = window_w / 2
 y = window_h / 2
@@ -80,10 +107,18 @@ const JUMPHEIGHT = 800
 
 function process() {
 
-    players[socket.id].process()
+    for (let player in players) {
+        if (player == socket.id) {
+            players[player].process()
+        } else {
+            players[player].sync()
+        }
+    }
 }
 
 function draw() {
+
+    draw_particles()
     
     for (let player in players) {
         players[player].draw()
@@ -99,25 +134,42 @@ class Player {
         this.color = color
         this.scale = 1
         this.vel = {x: 200, y: 0}
+
+        this.lerp_x = x; this.lerp_y = y
+        this.lerp_scale = 1
     }
 
     process() {
+        this.vel.y += GRAVITY * delta
+
+        this.scale = lerp(this.scale, 1, delta * 12)
+
         this.x += this.vel.x * delta
         this.y += this.vel.y * delta
 
         if (this.x < 0) {
             this.x = 0
             this.vel.x *= -1
+            this.scale = 1.5
         } else if (this.x > window_w) {
             this.x = 1024
             this.vel.x *= -1
+            this.scale = 1.5
         }
 
-        socket.emit("send_player_data", {
-            x: this.x, y: this.y,
+        if (this.y > window_h) {this.y = window_h}
 
+        socket.emit("send_player_data", JSON.stringify({
+            x: this.x, y: this.y,
+            scale: this.scale,
             id: socket.id
-        })
+        }))
+    }
+
+    sync() {
+        this.x = lerp(this.x, this.lerp_x, delta * 30)
+        this.y = lerp(this.y, this.lerp_y, delta * 30)
+        this.scale = lerp(this.scale, this.lerp_scale, delta * 50)
     }
 
     draw() {
@@ -125,11 +177,17 @@ class Player {
     }
 }
 
+when_pressed(["w", "ArrowUp"], function() {
+    local_player.vel.y = -JUMPHEIGHT
+})
+
 let local_player
 
 socket.on("update_player", function(data) {
-    players[data.id].x = data.x
-    players[data.id].y = data.y
+    data = JSON.parse(data)
+    players[data.id].lerp_x = data.x
+    players[data.id].lerp_y = data.y
+    players[data.id].lerp_scale = data.scale
 })
 
 socket.on("create_local_player", function(data) {
