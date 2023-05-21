@@ -7,7 +7,7 @@ let fps_counter = document.getElementById("fps_counter")
 
 let phone_regex = /android|iphone|kindle|ipad/i;
 function is_on_mobile() {
-    return regexp.test(details)
+    return phone_regex.test(details)
 }
 
 // Window setup
