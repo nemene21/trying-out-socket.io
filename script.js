@@ -1,6 +1,6 @@
 const username = "test" // prompt("Ime (kajgod):")
 
-const socket = io("http://localhost:3000", { transports : ['websocket'] });
+const socket = io("https://school-project-lh8g.onrender.com", { transports : ['websocket'] });
 const FPS = 90
 
 let fps_counter = document.getElementById("fps_counter")
