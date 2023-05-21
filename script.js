@@ -16,6 +16,7 @@ let ctx = canvas.getContext("2d")
 
 if (is_on_mobile()) {
     canvas.style.width = "60%"
+    warn("Okreni mobitel za bolje iskustvo.")
 }
 
 let delta = 0
