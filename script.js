@@ -155,6 +155,7 @@ class Player {
         this.scale = 1
         this.vel = {x: 250, y: 0}
         this.particle_timer = 0.02
+        this.flash = 0
 
         this.lerp_x = x; this.lerp_y = y
         this.lerp_scale = 1
@@ -167,6 +168,8 @@ class Player {
 
         this.x += this.vel.x * delta
         this.y += this.vel.y * delta
+
+        this.flash -= delta
 
         this.particle_timer -= delta
         if (this.particle_timer < 0) {
@@ -195,6 +198,7 @@ class Player {
             x: this.x, y: this.y,
             scale: this.scale,
             color: this.color,
+            flash: this.flash,
             id: socket.id
         }))
     }
@@ -208,6 +212,7 @@ class Player {
                 y: (Math.random() * 2 - 1) * 200
             })
         }
+        this.flash = 0.05
         play_sound("sounds/bounce.wav", 0.1, 0.4)
     }
 
@@ -218,7 +223,11 @@ class Player {
     }
 
     draw() {
-        circle(this.x, this.y, 25 * this.scale, this.color)
+        if (this.flash < 0) {
+            circle(this.x, this.y, 25 * this.scale, this.color)
+        } else {
+            circle(this.x, this.y, 25 * this.scale, "#FFFFFF")
+        }
     }
 }
 
@@ -245,6 +254,7 @@ socket.on("update_player", function(data) {
     players[data.id].lerp_y = data.y
     players[data.id].lerp_scale = data.scale
     players[data.id].color = data.color
+    players[data.id].flash = data.flash
 })
 
 socket.on("create_local_player", function(color) {

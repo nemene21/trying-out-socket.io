@@ -1,7 +1,5 @@
 const PORT = 3000
-const io = require("socket.io")(PORT, {
-    "origins": ["http://localhost:3000"]
-})
+const io = require("socket.io")(PORT)
 
 let players = {}
 let num_players = 0
