@@ -1,7 +1,7 @@
 const username = "test" // prompt("Ime (kajgod):")
 
 const socket = io("https://school-project-lh8g.onrender.com", { transports : ['websocket'] });
-const FPS = 90
+const FPS = 60
 
 let fps_counter = document.getElementById("fps_counter")
 
@@ -231,7 +231,7 @@ class Player {
     }
 }
 
-when_pressed(["w", "ArrowUp"], function() {
+function jump() {
     if (local_player.vel.y < -JUMPHEIGHT * 0.8) return
 
     local_player.vel.y = -JUMPHEIGHT
@@ -244,7 +244,10 @@ when_pressed(["w", "ArrowUp"], function() {
             y: (Math.random() * 2 - 1) * 160
         })
     }
-})
+}
+
+when_pressed(["w", "ArrowUp"], jump)
+canvas.onclick = jump
 
 let local_player
 
