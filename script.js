@@ -15,7 +15,7 @@ let canvas = document.getElementById("display")
 let ctx = canvas.getContext("2d")
 
 if (is_on_mobile()) {
-    canvas.style.transform = "scale(0.9) translate(-50%, -50%)"
+    canvas.style.width = "75%"
 }
 
 let delta = 0
