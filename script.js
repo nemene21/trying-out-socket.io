@@ -5,8 +5,18 @@ const FPS = 60
 
 let fps_counter = document.getElementById("fps_counter")
 
+let phone_regex = /android|iphone|kindle|ipad/i;
+function is_on_mobile() {
+    return regexp.test(details)
+}
+
+// Window setup
 let canvas = document.getElementById("display")
 let ctx = canvas.getContext("2d")
+
+if (is_on_mobile()) {
+    canvas.style.transform = "scale(0.9)"
+}
 
 let delta = 0
 let time  = 0
