@@ -108,10 +108,10 @@ function play_sound(path, pitch, pitch_random) {
     socket.emit("play_sound", {path: path, pitch: pitch, pitch_random: pitch_random})
 }
 
-socket.on("play_external_sound", function() {
-    var audio = new Audio(path);
+socket.on("play_external_sound", function(data) {
+    var audio = new Audio(data.path);
     audio.mozPreservesPitch = false;
-    audio.playbackspeed = pitch + (Math.random() * 2 - 1) * pitch_random
+    audio.playbackspeed = data.pitch + (Math.random() * 2 - 1) * data.pitch_random
     audio.play();
 })
 
