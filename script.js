@@ -195,7 +195,7 @@ function draw() {
     let height_offset
 
     for (let i = 0; i <= num_iter; i++) {
-        height_offset = Math.sin(time * 10 + i) * 12
+        height_offset = Math.sin(-time * 10 + i) * 12
         triangle(snippet * (i + 0.5), window_h - 16 - height_offset * 0.5, snippet, 32 + height_offset, "#FFFFFF")
     }
     for (let i = 0; i <= num_iter; i++) {
@@ -215,12 +215,15 @@ class Player {
         this.vel = {x: 250, y: 0}
         this.particle_timer = 0.02
         this.flash = 0
+        this.dead = false
 
         this.lerp_x = x; this.lerp_y = y
         this.lerp_scale = 1
     }
 
     process() {
+        if (this.dead) {return}
+
         this.vel.y += GRAVITY * delta
 
         this.scale = lerp(this.scale, 1, delta * 12)
@@ -251,13 +254,31 @@ class Player {
             this.bounce()
         }
 
-        if (this.y > window_h) {this.y = window_h}
+        if (this.y > window_h) {
+            this.y = window_h
+        } else if (this.y < 36) {
+            this.die(1)
+        }
+    }
 
+    die(direction) {
+        this.dead = true
+        play_sound("sounds/player_loose.wav")
+        for (let i = 0; i < 16; i++) {
+            spawn_particle(this.x, this.y, Math.random() * 20 + 15, Math.random() * 0.3 + 0.5, this.color, {
+                x: (Math.random() * 2 - 1) * 35,
+                y: 500 * direction * Math.random()
+            })
+        }
+    }
+
+    send_data_to_other_clinets() {
         socket.emit("send_player_data", JSON.stringify({
             x: this.x, y: this.y,
             scale: this.scale,
             color: this.color,
             flash: this.flash,
+            dead: this.dead,
             id: socket.id
         }))
     }
@@ -282,6 +303,8 @@ class Player {
     }
 
     draw() {
+        if (this.dead) {return}
+
         if (this.flash < 0) {
             circle(this.x, this.y, 25 * this.scale, this.color)
         } else {
@@ -291,7 +314,7 @@ class Player {
 }
 
 function jump() {
-    if (local_player.vel.y < -JUMPHEIGHT * 0.8) return
+    if (local_player.vel.y < -JUMPHEIGHT * 0.8 || local_player.dead) return
 
     local_player.vel.y = -JUMPHEIGHT
 
@@ -317,6 +340,7 @@ socket.on("update_player", function(data) {
     players[data.id].lerp_scale = data.scale
     players[data.id].color = data.color
     players[data.id].flash = data.flash
+    players[data.id].dead  = data.dead
 })
 
 socket.on("create_local_player", function(color) {
@@ -324,6 +348,8 @@ socket.on("create_local_player", function(color) {
     local_player = new Player(Math.random() * window_w, Math.random() * window_h, color)
     players[socket.id] = local_player
     socket.emit("local_player_created", {x: local_player.x, y: local_player.y, color: local_player.color})
+
+    setInterval(local_player.send_data_to_other_clinets, 100)
 })
 
 socket.on("sync_other_players", function(data) {
