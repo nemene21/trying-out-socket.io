@@ -22,7 +22,7 @@ let ctx = canvas.getContext("2d")
 canvas.style.width = "60%"
 alert("Okreni mobitel za bolje iskustvo.")
 
-canvas.addEventListener("double-click", function(event){ event. stopPropagation() })
+canvas.addEventListener("double-click", function(event){ event.stopPropagation() })
 
 let delta = 0
 let time  = 0
