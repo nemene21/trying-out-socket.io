@@ -27,6 +27,13 @@ const res = [1024, 600]
 const window_w = res[0]
 const window_h = res[1]
 
+function arrayRemove(arr, value) { 
+    
+    return arr.filter(function(ele){ 
+        return ele != value; 
+    });
+}
+
 function calculate_delta() {
     let now   = Date.now()
     let diff  = now - last_time
@@ -73,6 +80,15 @@ function circle(x, y, radius, color) {
     ctx.fill()
 }
 
+function triangle(x, y, width, height, color) {
+    ctx.beginPath()
+    ctx.moveTo(x, y - height * 0.5)
+    ctx.lineTo(x + width * 0.5, y + height * 0.5)
+    ctx.lineTo(x - width * 0.5, y + height * 0.5)
+    ctx.fillStyle = color
+    ctx.fill()
+}
+
 function clear(color="black") {
     ctx.beginPath()
     ctx.rect(0, 0, 1024, 600)
@@ -103,11 +119,14 @@ function spawn_particle(x, y, r, lf, color, vel={x: 0, y: 0}) {
         vel: vel
     }
 
+    particles.push(particle)
+
     socket.emit("spawn_particle", JSON.stringify(particle))
 }
 
-socket.on("update_particles", function(particle_data) {
-    particles = JSON.parse(particle_data)
+socket.on("spawn_external_particle", function(particle) {
+    particles.push(JSON.parse(particle))
+    console.log("particles_sent")
 })
 
 // Sounds
@@ -145,6 +164,18 @@ function process() {
             players[player].sync()
         }
     }
+
+    // Processing particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].lf -= delta
+
+        particles[i].x += particles[i].vel.x * delta
+        particles[i].y += particles[i].vel.y* delta
+
+        if (particles[i].lf < 0) {
+            particles = arrayRemove(particles, particles[i])
+        }
+    }
 }
 
 function draw() {
@@ -153,6 +184,23 @@ function draw() {
     
     for (let player in players) {
         players[player].draw()
+        if (player == socket.id) {
+            triangle(players[player].x, players[player].y - 48 + Math.sin(time * 10) * 10, 16, -16, players[player].color)
+        }
+    }
+
+    // Draw spikes
+    let num_iter = 24
+    let snippet = window_w / num_iter
+    let height_offset
+
+    for (let i = 0; i <= num_iter; i++) {
+        height_offset = Math.sin(time * 10 + i) * 12
+        triangle(snippet * (i + 0.5), window_h - 16 - height_offset * 0.5, snippet, 32 + height_offset, "#FFFFFF")
+    }
+    for (let i = 0; i <= num_iter; i++) {
+        height_offset = Math.sin(time * 10 + i) * 12
+        triangle(snippet * (i + 0.5), 16 + height_offset * 0.5, snippet, -32 - height_offset, "#FFFFFF")
     }
 }
 
