@@ -22,6 +22,8 @@ let ctx = canvas.getContext("2d")
 canvas.style.width = "60%"
 alert("Okreni mobitel za bolje iskustvo.")
 
+document.addEventListener("click", event => {})
+
 let delta = 0
 let time  = 0
 let last_time = Date.now()
