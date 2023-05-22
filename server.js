@@ -4,8 +4,10 @@ const io = require("socket.io")(PORT)
 let players = {}
 let particles = []
 const PLAYER_COLORS = [
-    "#e83b3b", "#0eaf9b", "#1ebc73", "#fb6b1d", "#905ea9", "#f9c22b"
+    "#0eaf9b", "#e83b3b", "#1ebc73", "#fb6b1d", "#905ea9", "#f9c22b"
 ]
+
+const MAX_PLAYERS = PLAYER_COLORS.length
 
 io.on("connection", function(socket) {
     console.log("new user!")
