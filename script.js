@@ -5,9 +5,14 @@ const FPS = 60
 
 let fps_counter = document.getElementById("fps_counter")
 
-let phone_regex = /android|iphone|kindle|ipad/i;
 function is_on_mobile() {
-    return phone_regex.test(navigator.userAgent)
+    return (navigator.userAgent.match(/Android/i)
+    || navigator.userAgent.match(/webOS/i)
+    || navigator.userAgent.match(/iPhone/i)
+    || navigator.userAgent.match(/iPad/i)
+    || navigator.userAgent.match(/iPod/i)
+    || navigator.userAgent.match(/BlackBerry/i)
+    || navigator.userAgent.match(/Windows Phone/i))
 }
 
 // Window setup
