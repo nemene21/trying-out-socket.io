@@ -222,6 +222,8 @@ class Player {
     }
 
     process() {
+        this.send_data_to_other_clinets()
+
         if (this.dead) {return}
 
         this.vel.y += GRAVITY * delta
@@ -305,6 +307,8 @@ class Player {
     draw() {
         if (this.dead) {return}
 
+        console.log("THING")
+
         if (this.flash < 0) {
             circle(this.x, this.y, 25 * this.scale, this.color)
         } else {
@@ -348,8 +352,6 @@ socket.on("create_local_player", function(color) {
     local_player = new Player(Math.random() * window_w, Math.random() * window_h, color)
     players[socket.id] = local_player
     socket.emit("local_player_created", {x: local_player.x, y: local_player.y, color: local_player.color})
-
-    setInterval(local_player.send_data_to_other_clinets, 100)
 })
 
 socket.on("sync_other_players", function(data) {
