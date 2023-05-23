@@ -290,8 +290,8 @@ class Player {
         let len = Math.sqrt(dif.x * dif.x + dif.y * dif.y)
 
         if (len < 25) {
-            this.x -= this.vel.x * delta * 8
-            this.y -= this.vel.y * delta * 8
+            this.x -= this.vel.x * delta * 4
+            this.y -= this.vel.y * delta * 4
 
             this.bounce()
             this.vel.y = other.vel.y
