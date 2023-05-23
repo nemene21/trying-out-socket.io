@@ -389,14 +389,14 @@ socket.on("create_local_player", function(color) {
     players = {}
     local_player = new Player(Math.random() * window_w, window_h * 0.5, color, username)
     players[socket.id] = local_player
-    socket.emit("local_player_created", {x: local_player.x, y: local_player.y, color: local_player.color, name: local_player.name})
+    socket.emit("local_player_created", {x: local_player.x, y: local_player.y, color: local_player.color, name: username})
 })
 
 socket.on("sync_other_players", function(data) {
     data = JSON.parse(data)
     for (let i in data) {
         let new_player = data[i]
-        players[new_player.id] = new Player(new_player.x, new_player.y, new_player.color, data.name)
+        players[new_player.id] = new Player(new_player.x, new_player.y, new_player.color, new_player.name)
     }
 })
 
