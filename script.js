@@ -1,9 +1,13 @@
-let username = prompt("Name?!'!?'1")
+let username = prompt("Ime (do 12 znakova)")
 if (username == undefined || username == "") {
-    username = "user"
+    username = "User"
     let number = String(Math.floor(Math.random() * 1000))
     username += "0" * (4 - number.length)
     username += String(Math.floor(Math.random() * 1000))
+}
+
+if (username.length > 12) {
+    username = username.slice(0, 12)
 }
 
 const socket = io("https://school-project-lh8g.onrender.com", { transports : ['websocket'] });
@@ -16,7 +20,7 @@ let canvas = document.getElementById("display")
 let ctx = canvas.getContext("2d")
 
 canvas.style.width = "60%"
-alert("Turn phone!?'1?'?")
+alert("Okreni mobitel")
 
 let delta = 0
 let time  = 0
@@ -90,7 +94,8 @@ function triangle(x, y, width, height, color) {
 
 ctx.textAlign = "center"
 ctx.font = "bolder 18px Arial"
-function text(x, y, str, color) {
+function text(x, y, str, color, size=18) {
+    ctx.font = "bolder " + size + "px Arial"
     ctx.fillStyle = color
     ctx.fillText(str, x, y)
 }
@@ -199,6 +204,11 @@ function process() {
 
 function draw() {
 
+    if (players[socket.id].dead) {
+        let number = Math.round(Math.max(0, players[socket.id].respawn_timer))
+        text(window_w * 0.5, window_h * 0.5 + 24, "BACK IN: " + number + "s", "#303030", 96)
+    }
+
     draw_particles()
     
     for (let player in players) {
@@ -207,7 +217,10 @@ function draw() {
             triangle(players[player].x, players[player].y - 48 + Math.sin(time * 10) * 10, 16, -16, players[player].color)
         }
         
-        text(players[player].x, players[player].y + 44, players[player].name, "#FFFFFF")
+        if (!players[player].dead)
+            text(players[player].x, players[player].y + 44, players[player].name, "#FFFFFF")
+        else
+            text(players[player].x, players[player].y + 44, players[player].name + " 💀", "#FFFFFF")
     }
 
     // Draw spikes
@@ -227,17 +240,21 @@ function draw() {
 
 clear()
 
+const RESPAWN_TIME = 5
+
 // Player logic
 class Player {
     constructor(x, y, color, name) {
         this.x = x; this.y = y
         this.color = color
-        this.scale = 1
+        this.scale = 0
         this.vel = {x: 250, y: 0}
         this.particle_timer = 0.02
         this.flash = 0
         this.dead = false
         this.name = name
+
+        this.respawn_timer = RESPAWN_TIME
 
         this.first_moved = false
 
@@ -248,7 +265,16 @@ class Player {
     process() {
         this.send_data_to_other_clinets()
 
-        if (this.dead) {return}
+        if (this.respawn_timer < 0) {
+            this.dead = false
+            this.x = Math.random() * window_w; this.y = window_h * 0.5
+            this.vel.x = 250; this.vel.y = 0
+            this.first_moved = false
+            this.scale = 0
+            this.respawn_timer = RESPAWN_TIME
+        }
+
+        if (this.dead) {this.respawn_timer -= delta; return}
 
         this.vel.y += GRAVITY * delta
 
@@ -315,7 +341,7 @@ class Player {
         let dif = {x: other.x - this.x, y: other.y - this.y}
         let len = Math.sqrt(dif.x * dif.x + dif.y * dif.y)
 
-        if (len < 30) {
+        if (len < 30 && !other.dead && other.first_moved) {
             this.x -= dif.x * 1.2
             this.y -= dif.y * 1.2
 
