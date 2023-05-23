@@ -289,7 +289,7 @@ class Player {
         let dif = {x: other.x - this.x, y: other.y - this.y}
         let len = Math.sqrt(dif.x * dif.x + dif.y * dif.y)
 
-        if (len < 25) {
+        if (len < 30) {
             this.x -= dif.x
             this.y -= dif.y
 
