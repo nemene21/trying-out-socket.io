@@ -1,4 +1,4 @@
-const username = "test" // prompt("Ime (kajgod):")
+const username = prompt("Name?!'!?'1")
 
 const socket = io("https://school-project-lh8g.onrender.com", { transports : ['websocket'] });
 const FPS = 60
@@ -10,7 +10,7 @@ let canvas = document.getElementById("display")
 let ctx = canvas.getContext("2d")
 
 canvas.style.width = "60%"
-alert("Okreni mobitel za bolje iskustvo.")
+alert("Turn phone!?'1?'?")
 
 let delta = 0
 let time  = 0
@@ -80,6 +80,11 @@ function triangle(x, y, width, height, color) {
     ctx.lineTo(x - width * 0.5, y + height * 0.5)
     ctx.fillStyle = color
     ctx.fill()
+}
+
+ctx.font = "30px Arial"
+function text(x, y, str) {
+    ctx.fillText(str, x, y)
 }
 
 function clear(color="black") {
@@ -186,6 +191,8 @@ function draw() {
         players[player].draw()
         if (player == socket.id) {
             triangle(players[player].x, players[player].y - 48 + Math.sin(time * 10) * 10, 16, -16, players[player].color)
+        } else {
+            text(players[player].x, players[player].y, players[player].name)
         }
     }
 
@@ -208,7 +215,7 @@ clear()
 
 // Player logic
 class Player {
-    constructor(x, y, color) {
+    constructor(x, y, color, name) {
         this.x = x; this.y = y
         this.color = color
         this.scale = 1
@@ -216,6 +223,7 @@ class Player {
         this.particle_timer = 0.02
         this.flash = 0
         this.dead = false
+        this.name = name
 
         this.first_moved = false
 
@@ -367,16 +375,16 @@ socket.on("update_player", function(data) {
 
 socket.on("create_local_player", function(color) {
     players = {}
-    local_player = new Player(Math.random() * window_w, window_h * 0.5, color)
+    local_player = new Player(Math.random() * window_w, window_h * 0.5, color, username)
     players[socket.id] = local_player
-    socket.emit("local_player_created", {x: local_player.x, y: local_player.y, color: local_player.color})
+    socket.emit("local_player_created", {x: local_player.x, y: local_player.y, color: local_player.color, name: local_player.name})
 })
 
 socket.on("sync_other_players", function(data) {
     data = JSON.parse(data)
     for (let i in data) {
         let new_player = data[i]
-        players[new_player.id] = new Player(new_player.x, new_player.y, new_player.color)
+        players[new_player.id] = new Player(new_player.x, new_player.y, new_player.color, data.name)
     }
 })
 
