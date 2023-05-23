@@ -217,6 +217,8 @@ class Player {
         this.flash = 0
         this.dead = false
 
+        this.first_moved = false
+
         this.lerp_x = x; this.lerp_y = y
         this.lerp_scale = 1
     }
@@ -230,8 +232,8 @@ class Player {
 
         this.scale = lerp(this.scale, 1, delta * 12)
 
-        this.x += this.vel.x * delta
-        this.y += this.vel.y * delta
+        this.x += this.vel.x * delta * Number(this.first_moved)
+        this.y += this.vel.y * delta * Number(this.first_moved)
 
         this.flash -= delta
 
@@ -260,6 +262,8 @@ class Player {
             this.y = window_h
         } else if (this.y < 36) {
             this.die(1)
+        } else if (this.y > window_h - 36) {
+            this.die(-1)
         }
     }
 
@@ -334,6 +338,7 @@ function jump() {
     if (local_player.vel.y < -JUMPHEIGHT * 0.8 || local_player.dead) return
 
     local_player.vel.y = -JUMPHEIGHT
+    local_player.first_moved = true
 
     play_sound("sounds/jump.wav", 0.2)
 
