@@ -1,4 +1,4 @@
-const username = prompt("Name?!'!?'1")
+const username = prompt("Name?!'!?'1") || "user" + String(Math.floor(Math.random() * 1000))
 
 const socket = io("https://school-project-lh8g.onrender.com", { transports : ['websocket'] });
 const FPS = 60
@@ -389,7 +389,7 @@ socket.on("sync_other_players", function(data) {
 })
 
 socket.on("player_joined", function(data) {
-    players[data.id] = new Player(data.x, data.y, data.color)
+    players[data.id] = new Player(data.x, data.y, data.color, data.name)
     console.log("new guy joined!")
 })
 
