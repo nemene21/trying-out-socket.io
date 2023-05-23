@@ -132,7 +132,6 @@ function spawn_particle(x, y, r, lf, color, vel={x: 0, y: 0}) {
 
 socket.on("spawn_external_particle", function(particle) {
     particles.push(JSON.parse(particle))
-    console.log("particles_sent")
 })
 
 // Sounds
@@ -339,8 +338,6 @@ class Player {
 
     draw() {
         if (this.dead) {return}
-
-        console.log("THING")
 
         if (this.flash < 0) {
             circle(this.x, this.y, 25 * this.scale, this.color)
