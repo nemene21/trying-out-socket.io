@@ -11,7 +11,17 @@ const MAX_PLAYERS = PLAYER_COLORS.length
 
 io.on("connection", function(socket) {
     console.log("new user!")
-    socket.emit("create_local_player", PLAYER_COLORS[Object.keys(players).length])
+    let chosen_color
+    let good = false
+    while (!good) {
+        chosen_color = PLAYER_COLORS[Math.floor(Math.random() * PLAYER_COLORS.length)]
+        good = true
+        for (let player in players) {
+            if (players[player].color == chosen_color) good = false
+        }
+    }
+
+    socket.emit("create_local_player", chosen_color)
     socket.emit("sync_other_players", JSON.stringify(players))
 
     socket.on("local_player_created", function(data) {
