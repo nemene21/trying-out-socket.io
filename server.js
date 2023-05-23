@@ -29,7 +29,7 @@ io.on("connection", function(socket) {
 
         socket.broadcast.emit("player_joined", data)
         
-        players[data.id] = {x: data.x, y: data.y, id: socket.id}
+        players[data.id] = {x: data.x, y: data.y, id: socket.id, name: data.name}
     })
 
     socket.on("send_player_data", function(data) {

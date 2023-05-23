@@ -89,7 +89,7 @@ function triangle(x, y, width, height, color) {
 }
 
 ctx.textAlign = "center"
-ctx.font = "bolder 16px Arial"
+ctx.font = "bolder 18px Arial"
 function text(x, y, str, color) {
     ctx.fillStyle = color
     ctx.fillText(str, x, y)
@@ -98,6 +98,13 @@ function text(x, y, str, color) {
 function clear(color="black") {
     ctx.beginPath()
     ctx.rect(0, 0, 1024, 600)
+    ctx.fillStyle = color
+    ctx.fill()
+}
+
+function rectange(x, y, w, h, color="black") {
+    ctx.beginPath()
+    ctx.rect(x - w * 0.5, y - h * 0.5, w, h)
     ctx.fillStyle = color
     ctx.fill()
 }
