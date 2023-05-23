@@ -19,10 +19,10 @@ function is_on_mobile() {
 let canvas = document.getElementById("display")
 let ctx = canvas.getContext("2d")
 
-canvas.style.width = "60%"
-alert("Okreni mobitel za bolje iskustvo.")
-
-canvas.addEventListener("double-click", function(event){ event.stopPropagation() })
+if (is_on_mobile()) {
+    canvas.style.width = "60%"
+    alert("Okreni mobitel za bolje iskustvo.")
+}
 
 let delta = 0
 let time  = 0
