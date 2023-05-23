@@ -205,7 +205,7 @@ function process() {
 function draw() {
 
     if (players[socket.id].dead) {
-        let number = Math.round(Math.max(0, players[socket.id].respawn_timer))
+        let number = Math.floor(Math.max(0, players[socket.id].respawn_timer))
         text(window_w * 0.5, window_h * 0.5 + 24, "BACK IN: " + number + "s", "#303030", 96)
     }
 
@@ -374,7 +374,11 @@ class Player {
         if (this.dead) {return}
 
         if (this.flash < 0) {
-            circle(this.x, this.y, 25 * this.scale, this.color)
+            if (this.first_moved) {
+                circle(this.x, this.y, 25 * this.scale, this.color)
+            } else {
+                circle(this.x, this.y, 25 * (this.scale + Math.sin(time * 10) * 0.2), this.color)
+            }
         } else {
             circle(this.x, this.y, 25 * this.scale, "#FFFFFF")
         }
