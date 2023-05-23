@@ -201,7 +201,7 @@ function draw() {
             triangle(players[player].x, players[player].y - 48 + Math.sin(time * 10) * 10, 16, -16, players[player].color)
         }
         
-        text(players[player].x, players[player].y + 44, players[player].name)
+        text(players[player].x, players[player].y + 44, players[player].name, "#FFFFFF")
     }
 
     // Draw spikes
