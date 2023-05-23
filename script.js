@@ -1,4 +1,7 @@
-const username = prompt("Name?!'!?'1") || "user" + String(Math.floor(Math.random() * 1000))
+const username = prompt("Name?!'!?'1")
+if (username == undefined || username == "") {
+    username = "user" + String(Math.floor(Math.random() * 1000))
+}
 
 const socket = io("https://school-project-lh8g.onrender.com", { transports : ['websocket'] });
 const FPS = 60
@@ -192,9 +195,9 @@ function draw() {
         players[player].draw()
         if (player == socket.id) {
             triangle(players[player].x, players[player].y - 48 + Math.sin(time * 10) * 10, 16, -16, players[player].color)
-        } else {
-            text(players[player].x, players[player].y + 36, players[player].name)
         }
+        
+        text(players[player].x, players[player].y + 36, players[player].name)
     }
 
     // Draw spikes
