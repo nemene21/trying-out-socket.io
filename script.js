@@ -316,12 +316,12 @@ class Player {
         let len = Math.sqrt(dif.x * dif.x + dif.y * dif.y)
 
         if (len < 30) {
-            this.x -= dif.x
-            this.y -= dif.y
+            this.x -= dif.x * 1.2
+            this.y -= dif.y * 1.2
 
             this.bounce()
             this.vel.x = (Number(dif.x < 0) * 2 - 1) * 250
-            this.vel.y += other.vel.y
+            this.vel.y = other.vel.y
         }
     }
 
