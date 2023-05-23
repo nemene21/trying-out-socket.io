@@ -153,6 +153,11 @@ function process() {
     for (let player in players) {
         if (player == socket.id) {
             players[player].process()
+
+            for (let other_player in players) {
+                players[player].try_collision(players[other_player])
+            }
+
         } else {
             players[player].sync()
         }
