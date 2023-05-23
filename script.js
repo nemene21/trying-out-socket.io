@@ -345,7 +345,7 @@ function jump() {
     for (let i = 0; i < 5; i++) {
         spawn_particle(local_player.x, local_player.y, Math.random() * 15 + 10, Math.random() * 0.2 + 0.2, local_player.color, {
             x: (Math.random() * 2 - 1) * 160,
-            y: window_h * 0.5
+            y: (Math.random() * 2 - 1) * 160
         })
     }
 }
@@ -367,7 +367,7 @@ socket.on("update_player", function(data) {
 
 socket.on("create_local_player", function(color) {
     players = {}
-    local_player = new Player(Math.random() * window_w, Math.random() * window_h, color)
+    local_player = new Player(Math.random() * window_w, window_h * 0.5, color)
     players[socket.id] = local_player
     socket.emit("local_player_created", {x: local_player.x, y: local_player.y, color: local_player.color})
 })
