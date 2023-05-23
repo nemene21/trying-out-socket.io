@@ -345,7 +345,7 @@ function jump() {
     for (let i = 0; i < 5; i++) {
         spawn_particle(local_player.x, local_player.y, Math.random() * 15 + 10, Math.random() * 0.2 + 0.2, local_player.color, {
             x: (Math.random() * 2 - 1) * 160,
-            y: (Math.random() * 2 - 1) * 160
+            y: window_h * 0.5
         })
     }
 }
