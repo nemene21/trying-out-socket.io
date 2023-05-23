@@ -193,7 +193,7 @@ function draw() {
         if (player == socket.id) {
             triangle(players[player].x, players[player].y - 48 + Math.sin(time * 10) * 10, 16, -16, players[player].color)
         } else {
-            text(players[player].x, players[player].y + 25, players[player].name)
+            text(players[player].x, players[player].y + 36, players[player].name)
         }
     }
 
