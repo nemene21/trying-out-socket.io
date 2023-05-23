@@ -1,6 +1,9 @@
 let username = prompt("Name?!'!?'1")
 if (username == undefined || username == "") {
-    username = "user" + String(Math.floor(Math.random() * 1000))
+    username = "user"
+    let number = String(Math.floor(Math.random() * 1000))
+    username += "0" * (4 - number.length)
+    username += String(Math.floor(Math.random() * 1000))
 }
 
 const socket = io("https://school-project-lh8g.onrender.com", { transports : ['websocket'] });
