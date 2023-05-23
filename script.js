@@ -346,7 +346,7 @@ function jump() {
 }
 
 when_pressed(["w", "ArrowUp"], jump)
-canvas.addEventListener("touchstart", jump)
+document.getElementsByTagName("html")[0].addEventListener("touchstart", jump)
 
 let local_player
 
