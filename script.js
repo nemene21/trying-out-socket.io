@@ -89,7 +89,7 @@ function triangle(x, y, width, height, color) {
 }
 
 ctx.textAlign = "center"
-ctx.font = "12px Arial bolder"
+ctx.font = "16px Arial bolder"
 function text(x, y, str, color) {
     ctx.fillStyle = color
     ctx.fillText(str, x, y)
@@ -201,7 +201,7 @@ function draw() {
             triangle(players[player].x, players[player].y - 48 + Math.sin(time * 10) * 10, 16, -16, players[player].color)
         }
         
-        text(players[player].x, players[player].y + 36, players[player].name)
+        text(players[player].x, players[player].y + 44, players[player].name)
     }
 
     // Draw spikes
