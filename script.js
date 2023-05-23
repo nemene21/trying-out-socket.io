@@ -5,18 +5,12 @@ const FPS = 60
 
 let fps_counter = document.getElementById("fps_counter")
 
-function is_on_mobile() {
-    return /android|iphone|kindle|ipad/i.test(navigator.userAgent)
-}
-
 // Window setup
 let canvas = document.getElementById("display")
 let ctx = canvas.getContext("2d")
 
-if (is_on_mobile()) {
-    canvas.style.width = "60%"
-    alert("Okreni mobitel za bolje iskustvo.")
-}
+canvas.style.width = "60%"
+alert("Okreni mobitel za bolje iskustvo.")
 
 let delta = 0
 let time  = 0
