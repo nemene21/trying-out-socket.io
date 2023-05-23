@@ -155,7 +155,9 @@ function process() {
             players[player].process()
 
             for (let other_player in players) {
-                players[player].try_collision(players[other_player])
+                if (other_player != player) {
+                    players[player].try_collision(players[other_player])
+                }
             }
 
         } else {
