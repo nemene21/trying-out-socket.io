@@ -82,7 +82,8 @@ function triangle(x, y, width, height, color) {
     ctx.fill()
 }
 
-ctx.font = "30px Arial"
+ctx.textAlign = "center"
+ctx.font = "12px Arial"
 function text(x, y, str) {
     ctx.fillText(str, x, y)
 }
