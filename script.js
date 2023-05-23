@@ -333,6 +333,7 @@ class Player {
             color: this.color,
             flash: this.flash,
             dead: this.dead,
+            first_moved: this.first_moved,
             id: socket.id
         }))
     }
@@ -414,6 +415,7 @@ socket.on("update_player", function(data) {
     players[data.id].color = data.color
     players[data.id].flash = data.flash
     players[data.id].dead  = data.dead
+    players[data.id].first_moved = data.first_moved
 })
 
 socket.on("create_local_player", function(color) {
