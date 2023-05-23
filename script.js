@@ -1,4 +1,4 @@
-const username = prompt("Name?!'!?'1")
+let username = prompt("Name?!'!?'1")
 if (username == undefined || username == "") {
     username = "user" + String(Math.floor(Math.random() * 1000))
 }
@@ -86,8 +86,9 @@ function triangle(x, y, width, height, color) {
 }
 
 ctx.textAlign = "center"
-ctx.font = "12px Arial"
-function text(x, y, str) {
+ctx.font = "12px Arial bolder"
+function text(x, y, str, color) {
+    ctx.fillStyle = color
     ctx.fillText(str, x, y)
 }
 
