@@ -278,6 +278,16 @@ class Player {
         }))
     }
 
+    try_collision(other) {
+        let dif = {x: other.x - this.x, y: other.y - this.y}
+        let len = Math.sqrt(dif.x * dif.x + dif.y * dif.y)
+
+        if (len < 25) {
+            this.bounce()
+            this.vel.y = other.vel.y
+        }
+    }
+
     bounce() {
         this.vel.x *= -1
         this.scale = 1.5
