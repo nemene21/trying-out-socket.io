@@ -292,6 +292,9 @@ class Player {
         if (len < 25) {
             this.bounce()
             this.vel.y = other.vel.y
+            
+            this.x += this.vel.x * delta * 2
+            this.y += this.vel.y * delta * 2
         }
     }
 
