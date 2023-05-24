@@ -235,7 +235,7 @@ function draw() {
 
     // text_uncentered(36, 100, players[socket.id].score, "#505050", 64)
     for (let i = 0; i < leaderboard.length; i++) {
-        text_uncentered(36, 100, String(i) + ". - " + players[socket.id].name + " - " + players[socket.id].score, "#404040", 56)
+        text_uncentered(36, 100 + i * 40, String(i) + ". " + players[socket.id].name + " - " + players[socket.id].score, "#333333", 36)
     }
 
     for (let player in players) {
