@@ -45,6 +45,7 @@ io.on("connection", function(socket) {
         if (killer != "") {
             players[killer].score += 1
             socket.broadcast.to(killer).emit("got_point")
+            players[socket.id].last_hit_by = ""
         }
     })
 
