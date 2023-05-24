@@ -92,9 +92,15 @@ function triangle(x, y, width, height, color) {
     ctx.fill()
 }
 
-ctx.textAlign = "center"
 ctx.font = "bolder 18px Arial"
 function text(x, y, str, color, size=18) {
+    ctx.textAlign = "center"
+    ctx.font = "bolder " + size + "px Arial"
+    ctx.fillStyle = color
+    ctx.fillText(str, x, y)
+}
+function text_uncentered(x, y, str, color, size=18) {
+    ctx.textAlign = "left"
     ctx.font = "bolder " + size + "px Arial"
     ctx.fillStyle = color
     ctx.fillText(str, x, y)
@@ -180,7 +186,7 @@ function process() {
 
             for (let other_player in players) {
                 if (other_player != player) {
-                    players[player].try_collision(players[other_player])
+                    players[player].try_collision(other_player, players[other_player])
                 }
             }
 
@@ -208,6 +214,8 @@ function draw() {
         let number = Math.floor(Math.max(0, players[socket.id].respawn_timer))
         text(window_w * 0.5, window_h * 0.5 + 24, "BACK IN: " + number + "s", "#303030", 96)
     }
+
+    text_uncentered(48, 48, players[socket.id].score, "#303030", 24)
 
     draw_particles()
     
@@ -242,6 +250,8 @@ clear()
 
 const RESPAWN_TIME = 5
 
+socket.on("got_point", function() { players[socket.id].score += 1 })
+
 // Player logic
 class Player {
     constructor(x, y, color, name) {
@@ -253,6 +263,7 @@ class Player {
         this.flash = 0
         this.dead = false
         this.name = name
+        this.score = 0
 
         this.respawn_timer = RESPAWN_TIME
 
@@ -334,21 +345,24 @@ class Player {
             flash: this.flash,
             dead: this.dead,
             first_moved: this.first_moved,
+            score: this.score,
             id: socket.id
         }))
     }
 
-    try_collision(other) {
+    try_collision(key, other) {
         let dif = {x: other.x - this.x, y: other.y - this.y}
         let len = Math.sqrt(dif.x * dif.x + dif.y * dif.y)
 
-        if (len < 50 && !other.dead && other.first_moved && this.first_moved) {
+        if (len < 40 && !other.dead && other.first_moved && this.first_moved) {
             this.x -= dif.x
             this.y -= dif.y
 
             this.bounce()
             this.vel.x = (Number(dif.x < 0) * 2 - 1) * 250
-            this.vel.y = other.vel.y * 1.5
+            this.vel.y -= other.vel.y * Math.abs(dir.y) / 40
+
+            socket.emit("hit_player", key)
         }
     }
 
@@ -376,12 +390,12 @@ class Player {
 
         if (this.flash < 0) {
             if (this.first_moved) {
-                circle(this.x, this.y, 25 * this.scale, this.color)
+                circle(this.x, this.y, 20 * this.scale, this.color)
             } else {
-                circle(this.x, this.y, 25 * (this.scale + Math.sin(time * 10) * 0.2), this.color)
+                circle(this.x, this.y, 20 * (this.scale + Math.sin(time * 10) * 0.2), this.color)
             }
         } else {
-            circle(this.x, this.y, 25 * this.scale, "#FFFFFF")
+            circle(this.x, this.y, 20 * this.scale, "#FFFFFF")
         }
     }
 }
@@ -416,6 +430,7 @@ socket.on("update_player", function(data) {
     players[data.id].flash = data.flash
     players[data.id].dead  = data.dead
     players[data.id].first_moved = data.first_moved
+    players[data.id].score = data.score
 })
 
 socket.on("create_local_player", function(color) {

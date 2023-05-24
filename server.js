@@ -29,11 +29,23 @@ io.on("connection", function(socket) {
 
         socket.broadcast.emit("player_joined", data)
         
-        players[data.id] = {x: data.x, y: data.y, id: socket.id, name: data.name}
+        players[data.id] = {x: data.x, y: data.y, id: socket.id, name: data.name, last_hit_by: "", score: 0}
+    })
+
+    socket.on("hit_player", function(player_key) {
+        players[player_key].last_hit_by = socket.id
     })
 
     socket.on("send_player_data", function(data) {
         socket.broadcast.emit("update_player", data)
+    })
+
+    socket.on("die", function(data) {
+        let killer = players[socket.id].last_hit_by
+        if (killer != "") {
+            players[killer].score += 1
+            socket.broadcast.to(killer).emit("got_point")
+        }
     })
 
     socket.on("spawn_particle", function(particle) {
