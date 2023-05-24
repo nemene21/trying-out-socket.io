@@ -314,7 +314,7 @@ class Player {
         this.scale = lerp(this.scale, 1, delta * 12)
 
         this.x += this.vel.x * delta * Number(this.first_moved)
-        this.y += this.vel.y * delta * Number(this.first_moved)
+        this.y -= this.vel.y * delta * Number(this.first_moved)
 
         this.flash -= delta
 
