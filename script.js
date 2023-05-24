@@ -215,7 +215,12 @@ function draw() {
         text(window_w * 0.5, window_h * 0.5 + 24, "BACK IN: " + number + "s", "#303030", 96)
     }
 
-    text_uncentered(64, 64, players[socket.id].score, "#303030", 64)
+    text_uncentered(36, 100, players[socket.id].score, "#303030", 64)
+
+    for (let player in players) {
+        if (players[player].dead)
+            text(players[player].x, players[player].y + 4, "💀", "#FFFFFF", 48)
+    }
 
     draw_particles()
     
@@ -225,10 +230,7 @@ function draw() {
             triangle(players[player].x, players[player].y - 48 + Math.sin(time * 10) * 10, 16, -16, players[player].color)
         }
         
-        if (!players[player].dead)
-            text(players[player].x, players[player].y + 44, players[player].name, "#FFFFFF")
-        else
-            text(players[player].x, players[player].y + 44, players[player].name + " 💀", "#FFFFFF")
+        text(players[player].x, players[player].y + 44, players[player].name, "#FFFFFF")
     }
 
     // Draw spikes
