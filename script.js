@@ -385,7 +385,7 @@ class Player {
 
             this.bounce()
             this.vel.x = (Number(dif.x < 0) * 2 - 1) * 250
-            this.vel.y += other.vel.y * Math.abs(dif.y) / 40
+            this.vel.y = 50 * dif.y / 40
 
             socket.emit("hit_player", key)
         }
