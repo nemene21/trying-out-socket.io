@@ -342,13 +342,13 @@ class Player {
         let dif = {x: other.x - this.x, y: other.y - this.y}
         let len = Math.sqrt(dif.x * dif.x + dif.y * dif.y)
 
-        if (len < 30 && !other.dead && other.first_moved) {
+        if (len < 30 && !other.dead && other.first_moved && this.first_moved) {
             this.x -= dif.x * 1.2
             this.y -= dif.y * 1.2
 
             this.bounce()
             this.vel.x = (Number(dif.x < 0) * 2 - 1) * 250
-            this.vel.y = -other.vel.y
+            this.vel.y -= other.vel.y * 3
         }
     }
 
