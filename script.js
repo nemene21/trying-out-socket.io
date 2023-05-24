@@ -177,8 +177,22 @@ y = window_h / 2
 
 const GRAVITY = 1200
 const JUMPHEIGHT = 600
+let leaderboard = []
+
+function sort_leaderboard() {
+    for (let i = 0; i < leaderboard.length - 1; i++) {
+        for (let j = i + 1; j < leaderboard.length; j++) {
+            if (leaderboard[i][1] > leaderboard[j][1]) {
+                let hold = leaderboard[i][1]
+                leaderboard[i][1] = leaderboard[j][1]
+                leaderboard[j][1] = hold
+            }
+        }
+    }
+}
 
 function process() {
+    leaderboard = []
 
     for (let player in players) {
         if (player == socket.id) {
@@ -193,7 +207,11 @@ function process() {
         } else {
             players[player].sync()
         }
+
+        leaderboard.push([players[player].name, players[player].score])
     }
+
+    sort_leaderboard()
 
     // Processing particles
     for (let i = particles.length - 1; i >= 0; i--) {
@@ -212,10 +230,13 @@ function draw() {
 
     if (players[socket.id].dead) {
         let number = Math.floor(Math.max(0, players[socket.id].respawn_timer))
-        text(window_w * 0.5, window_h * 0.5 + 24, "BACK IN: " + number + "s", "#303030", 96)
+        text(window_w * 0.5, window_h * 0.5 + 24, "BACK IN: " + number + "s", "#505050", 96)
     }
 
-    text_uncentered(36, 100, players[socket.id].score, "#303030", 64)
+    // text_uncentered(36, 100, players[socket.id].score, "#505050", 64)
+    for (let i = 0; i < leaderboard.length; i++) {
+        text_uncentered(36, 100, String(i) + ". - " + players[socket.id].name + " - " + players[socket.id].score, "#404040", 56)
+    }
 
     for (let player in players) {
         if (players[player].dead)
