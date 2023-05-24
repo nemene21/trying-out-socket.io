@@ -40,7 +40,7 @@ io.on("connection", function(socket) {
         socket.broadcast.emit("update_player", data)
     })
 
-    socket.on("die", function(data) {
+    socket.on("die", function() {
         let killer = players[socket.id].last_hit_by
         if (killer != "") {
             players[killer].score += 1

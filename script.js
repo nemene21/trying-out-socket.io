@@ -175,8 +175,8 @@ let x, y
 x = window_w / 2
 y = window_h / 2
 
-const GRAVITY = 1600
-const JUMPHEIGHT = 800
+const GRAVITY = 1200
+const JUMPHEIGHT = 600
 
 function process() {
 
@@ -215,7 +215,7 @@ function draw() {
         text(window_w * 0.5, window_h * 0.5 + 24, "BACK IN: " + number + "s", "#303030", 96)
     }
 
-    text_uncentered(48, 48, players[socket.id].score, "#303030", 24)
+    text_uncentered(64, 64, players[socket.id].score, "#303030", 64)
 
     draw_particles()
     
@@ -327,6 +327,9 @@ class Player {
     }
 
     die(direction) {
+        if (this.dead) return
+
+        socket.emit("die")
         this.dead = true
         play_sound("sounds/player_loose.wav")
         for (let i = 0; i < 16; i++) {
