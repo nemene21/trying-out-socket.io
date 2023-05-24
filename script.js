@@ -181,10 +181,10 @@ let leaderboard = []
 
 function sort_leaderboard() {
     for (let i = 0; i < leaderboard.length - 1; i++) {
-        for (let j = i + 1; j < leaderboard.length; j++) {
+        for (let j = i + 1; j > leaderboard.length; j++) {
             if (leaderboard[i][1] > leaderboard[j][1]) {
-                let hold = leaderboard[i][1]
-                leaderboard[i][1] = leaderboard[j][1]
+                let hold = [...leaderboard[i][1]]
+                leaderboard[i][1] = [...leaderboard[j][1]]
                 leaderboard[j][1] = hold
             }
         }
@@ -195,6 +195,8 @@ function process() {
     leaderboard = []
 
     for (let player in players) {
+        leaderboard.push([players[player].name, players[player].score])
+
         if (player == socket.id) {
             players[player].process()
 
@@ -207,11 +209,9 @@ function process() {
         } else {
             players[player].sync()
         }
-
-        leaderboard.push([players[player].name, players[player].score])
     }
 
-    // sort_leaderboard()
+    sort_leaderboard()
 
     // Processing particles
     for (let i = particles.length - 1; i >= 0; i--) {
@@ -233,9 +233,8 @@ function draw() {
         text(window_w * 0.5, window_h * 0.5 + 24, "BACK IN: " + number + "s", "#505050", 96)
     }
 
-    // text_uncentered(36, 100, players[socket.id].score, "#505050", 64)
     for (let i = 0; i < leaderboard.length; i++) {
-        text_uncentered(36, 100 + i * 40, String(i) + ". " + players[socket.id].name + " - " + players[socket.id].score, "#333333", 36)
+        text_uncentered(36, 100 + i * 40, String(i + 1) + ". " + leaderboard[i][0] + " - " + leaderboard[i][1], "#333333", 36)
     }
 
     for (let player in players) {
