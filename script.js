@@ -211,7 +211,7 @@ function process() {
         leaderboard.push([players[player].name, players[player].score])
     }
 
-    sort_leaderboard()
+    // sort_leaderboard()
 
     // Processing particles
     for (let i = particles.length - 1; i >= 0; i--) {
