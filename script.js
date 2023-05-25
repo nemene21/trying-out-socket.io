@@ -281,6 +281,7 @@ class Player {
         this.dead = false
         this.name = name
         this.score = 0
+        this.last_wall = -1
 
         this.respawn_timer = RESPAWN_TIME
 
@@ -329,13 +330,19 @@ class Player {
         if (this.x < 0) {
             this.x = 0
             this.bounce()
-            this.score += 1
-            play_sound_locally("sounds/get_point.wav")
+            if (this.last_wall != 0) {
+                this.score += 1
+                play_sound_locally("sounds/get_point.wav")
+                this.last_wall = 0
+            }
         } else if (this.x > window_w) {
-            this.x = 1024
+            this.x = window_w
             this.bounce()
-            this.score += 1
-            play_sound_locally("sounds/get_point.wav")
+            if (this.last_wall != window_w) {
+                this.score += 1
+                play_sound_locally("sounds/get_point.wav")
+                this.last_wall = window_w
+            }
         }
 
         if (this.y > window_h) {
