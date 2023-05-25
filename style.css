@@ -5,6 +5,7 @@ body {
     height: 100%;
     overflow: hidden;
     touch-action: pan-x pan-y;
+    background-image: linear-gradient(#303030 #606060);
 }
 
 #fps_counter {
