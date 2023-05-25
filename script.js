@@ -309,8 +309,8 @@ class Player {
         this.particle_timer -= delta
         if (this.particle_timer < 0 && this.first_moved) {
             spawn_particle(
-                this.x + (Math.random() * 2 - 1) * 12,
-                this.y + (Math.random() * 2 - 1) * 12,
+                this.x + (Math.random() * 2 - 1) * 8,
+                this.y + (Math.random() * 2 - 1) * 8,
                 4 + Math.random() * 4,
                 0.5 * Math.random() + 0.1,
                 this.color,
