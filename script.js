@@ -301,6 +301,7 @@ class Player {
             this.first_moved = false
             this.scale = 0
             this.respawn_timer = RESPAWN_TIME
+            play_sound("sounds/respawn.wav")
         }
 
         if (this.dead) {this.respawn_timer -= delta; return}
