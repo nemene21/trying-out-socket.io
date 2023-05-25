@@ -357,6 +357,8 @@ class Player {
     die(direction) {
         if (this.dead) return
 
+        this.score = 0
+
         socket.emit("die")
         this.dead = true
         play_sound("sounds/player_loose.wav")
