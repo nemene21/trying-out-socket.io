@@ -179,18 +179,6 @@ const GRAVITY = 1200
 const JUMPHEIGHT = 600
 let leaderboard = []
 
-function sort_leaderboard() {
-    for (let i = 0; i < leaderboard.length - 1; i++) {
-        for (let j = i + 1; j > leaderboard.length; j++) {
-            if (leaderboard[i][1] > leaderboard[j][1]) {
-                let hold = [...leaderboard[i][1]]
-                leaderboard[i][1] = [...leaderboard[j][1]]
-                leaderboard[j][1] = hold
-            }
-        }
-    }
-}
-
 function process() {
     leaderboard = []
 
@@ -211,7 +199,7 @@ function process() {
         }
     }
 
-    sort_leaderboard()
+    leaderboard.sort(function(a, b) {return a[1] > b[1]})
 
     // Processing particles
     for (let i = particles.length - 1; i >= 0; i--) {
