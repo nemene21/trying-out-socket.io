@@ -199,7 +199,7 @@ function process() {
         }
     }
 
-    leaderboard.sort(function(a, b) {return a[1] - b[1]})
+    leaderboard.sort(function(a, b) {return b[1] - a[1]})
 
     // Processing particles
     for (let i = particles.length - 1; i >= 0; i--) {
