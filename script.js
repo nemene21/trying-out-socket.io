@@ -153,10 +153,17 @@ socket.on("spawn_external_particle", function(particle) {
 })
 
 // Sounds
-function play_sound(path, pitch, pitch_random) {
+function play_sound_locally(path, pitch_random = 0.1, pitch = 1) {
     var audio = new Audio(path);
     audio.mozPreservesPitch = false;
     audio.playbackspeed = pitch + (Math.random() * 2 - 1) * pitch_random
+    audio.play();
+}
+
+function play_sound(path, pitch_random = 0.1, pitch = 1) {
+    var audio = new Audio(path);
+    audio.mozPreservesPitch = false;
+    audio.playbackRate = pitch + (Math.random() * 2 - 1) * pitch_random
     audio.play();
     socket.emit("play_sound", {path: path, pitch: pitch, pitch_random: pitch_random})
 }
@@ -164,7 +171,7 @@ function play_sound(path, pitch, pitch_random) {
 socket.on("play_external_sound", function(data) {
     var audio = new Audio(data.path);
     audio.mozPreservesPitch = false;
-    audio.playbackspeed = data.pitch + (Math.random() * 2 - 1) * data.pitch_random
+    audio.playbackRate = data.pitch + (Math.random() * 2 - 1) * data.pitch_random
     audio.play();
 })
 
@@ -322,9 +329,13 @@ class Player {
         if (this.x < 0) {
             this.x = 0
             this.bounce()
+            this.score += 1
+            play_sound_locally("sounds/get_point.wav")
         } else if (this.x > window_w) {
             this.x = 1024
             this.bounce()
+            this.score += 1
+            play_sound_locally("sounds/get_point.wav")
         }
 
         if (this.y > window_h) {
@@ -389,7 +400,7 @@ class Player {
             })
         }
         this.flash = 0.05
-        play_sound("sounds/bounce.wav", 0.1, 0.4)
+        play_sound("sounds/bounce.wav")
     }
 
     sync() {
@@ -419,7 +430,7 @@ function jump() {
     local_player.vel.y = -JUMPHEIGHT
     local_player.first_moved = true
 
-    play_sound("sounds/jump.wav", 0.2)
+    play_sound("sounds/jump.wav")
 
     for (let i = 0; i < 5; i++) {
         spawn_particle(local_player.x, local_player.y, Math.random() * 15 + 10, Math.random() * 0.2 + 0.2, local_player.color, {

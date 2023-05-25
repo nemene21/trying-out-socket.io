@@ -42,11 +42,11 @@ io.on("connection", function(socket) {
 
     socket.on("die", function() {
         let killer = players[socket.id].last_hit_by
-        if (players[killer] != undefined) {
-            players[killer].score += 1
-            socket.broadcast.to(killer).emit("got_point")
-            players[socket.id].last_hit_by = ""
-        }
+        // if (players[killer] != undefined) {
+        //     players[killer].score += 1
+        //     socket.broadcast.to(killer).emit("got_point")
+        //     players[socket.id].last_hit_by = ""
+        // }
     })
 
     socket.on("spawn_particle", function(particle) {
