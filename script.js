@@ -456,7 +456,6 @@ function jump() {
 }
 
 socket.on("got_hit", function(data) {
-    data.other.vel.y *= -1
     data.dif.x *= -1
     data.dif.y *= -1
     local_player.collide(data.dif, data.other)
