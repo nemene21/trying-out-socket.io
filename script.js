@@ -388,7 +388,7 @@ class Player {
     }
 
     try_collision(key, other) {
-        if (this.i_frame < 0) return
+        if (this.i_frame > 0) return
 
         let dif = {x: other.x - this.x, y: other.y - this.y}
         let len = Math.sqrt(dif.x * dif.x + dif.y * dif.y)
@@ -401,7 +401,7 @@ class Player {
     }
 
     collide(dif, other) {
-        if (this.i_frame < 0) return
+        if (this.i_frame > 0) return
 
         this.i_frame = 0.05
         this.x -= dif.x
