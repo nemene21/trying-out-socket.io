@@ -409,7 +409,7 @@ class Player {
 
         this.bounce()
         this.vel.x = (Number(dif.x < 0) * 2 - 1) * 250
-        this.vel.y += other.vel.y
+        this.vel.y += other.vel.y * 3
 
     }
 
