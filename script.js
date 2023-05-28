@@ -282,6 +282,7 @@ class Player {
         this.name = name
         this.score = 0
         this.last_wall = -1
+        this.i_frame = 0.05
 
         this.respawn_timer = RESPAWN_TIME
 
@@ -305,6 +306,8 @@ class Player {
         }
 
         if (this.dead) {this.respawn_timer -= delta; return}
+
+        this.i_frame -= delta
 
         this.vel.y += GRAVITY * delta
 
@@ -385,6 +388,8 @@ class Player {
     }
 
     try_collision(key, other) {
+        if (this.i_frame < 0) return
+
         let dif = {x: other.x - this.x, y: other.y - this.y}
         let len = Math.sqrt(dif.x * dif.x + dif.y * dif.y)
 
@@ -396,6 +401,9 @@ class Player {
     }
 
     collide(dif, other) {
+        if (this.i_frame < 0) return
+
+        this.i_frame = 0.05
         this.x -= dif.x
         this.y -= dif.y
 
