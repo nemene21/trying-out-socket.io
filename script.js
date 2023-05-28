@@ -389,15 +389,20 @@ class Player {
         let len = Math.sqrt(dif.x * dif.x + dif.y * dif.y)
 
         if (len < 40 && !other.dead && other.first_moved && this.first_moved) {
-            this.x -= dif.x * 1.2
-            this.y -= dif.y * 1.2
+            socket.emit("hit_player", {key: key, other: this, dif: dif})
 
-            this.bounce()
-            this.vel.x = (Number(dif.x < 0) * 2 - 1) * 250
-            this.vel.y = 50 * dif.y / 40
-
-            socket.emit("hit_player", key)
+            this.collide(dif, other)
         }
+    }
+
+    collide(dif, other) {
+        this.x -= dif.x
+        this.y -= dif.y
+
+        this.bounce()
+        this.vel.x = (Number(dif.x < 0) * 2 - 1) * 250
+        this.vel.y += other.vel.y
+
     }
 
     bounce() {
@@ -449,6 +454,10 @@ function jump() {
         })
     }
 }
+
+socket.on("got_hit", function(data) {
+    local_player.collide(data.dif, data.other)
+})
 
 when_pressed(["w", "ArrowUp"], jump)
 document.getElementsByTagName("html")[0].addEventListener("touchstart", jump)

@@ -32,8 +32,9 @@ io.on("connection", function(socket) {
         players[data.id] = {x: data.x, y: data.y, id: socket.id, name: data.name, last_hit_by: "", score: 0}
     })
 
-    socket.on("hit_player", function(player_key) {
-        players[player_key].last_hit_by = socket.id
+    socket.on("hit_player", function(data) {
+        players[data.key].last_hit_by = socket.id
+        socket.broadcast.to(data.key).emit("got_hit", data)
     })
 
     socket.on("send_player_data", function(data) {
