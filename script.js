@@ -508,7 +508,7 @@ socket.on("player_joined", function(data) {
 }) 
 
 socket.on("spawn_laser", function(y) {
-
+    play_sound_locally("sounds/laser_spawn.wav")
 })
 
 socket.on("player_left", function(id) {

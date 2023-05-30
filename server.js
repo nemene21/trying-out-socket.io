@@ -70,7 +70,7 @@ function spawn_laser() {
     io.emit("spawn_laser")
 
     lasers.push({
-        y: 
+        y: Math.random() * 500 + 50
     })
 
     setTimeout(spawn_laser, (Math.random() * 10 + 4) * 1000)
