@@ -362,6 +362,7 @@ class Player {
         if (this.dead) return
 
         this.score = 0
+        this.last_wall = 999
 
         socket.emit("die")
         this.dead = true
@@ -409,7 +410,7 @@ class Player {
 
         this.bounce()
         this.vel.x = (Number(dif.x < 0) * 2 - 1) * 250
-        this.vel.y += other.vel.y * 3 * abs(dif.y / 40)
+        this.vel.y += abs(other.vel.y) * 3 * dif.y / 40
 
     }
 
