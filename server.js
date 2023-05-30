@@ -64,3 +64,16 @@ io.on("connection", function(socket) {
         delete(players[socket.id])
     })
 })
+
+let lasers = {}
+function spawn_laser() {
+    io.emit("spawn_laser")
+
+    lasers.push({
+        y: 
+    })
+
+    setTimeout(spawn_laser, (Math.random() * 10 + 4) * 1000)
+}
+
+setTimeout(spawn_laser, (Math.random() * 10 + 4) * 1000)

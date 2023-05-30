@@ -505,6 +505,10 @@ socket.on("sync_other_players", function(data) {
 socket.on("player_joined", function(data) {
     players[data.id] = new Player(data.x, data.y, data.color, data.name)
     console.log("new guy joined!")
+}) 
+
+socket.on("spawn_laser", function(y) {
+
 })
 
 socket.on("player_left", function(id) {
