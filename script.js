@@ -120,6 +120,11 @@ function rectange(x, y, w, h, color = "black") {
     ctx.fill()
 }
 
+function usklicnik(x, y, w, h, color="#FFFFFF") {
+    rectangle(x, y - h * 0.33, w, h * 0.66)
+    rectangle(x, y + h * 0.5,  w, w)
+}
+
 function color(r, g, b, a = 1) {
     return "rgba(" + r + "," + g + "," + b + "," + a + ")"
 }
@@ -271,8 +276,12 @@ function draw() {
     for (let i = 0; i < lasers.length; i++) {
         if (lasers[i].lf < 7)
             rectange(window_w * 0.5, lasers[i].y, window_w, Math.sin(lasers[i].lf / 7 * 3.14) * 32, "#FFFFFF")
-        else
+        else {
             rectange(window_w * 0.5, lasers[i].y, window_w, Math.sin((lasers[i].lf - 7) / 3 * 3.14) * 6, "#FFFFFF")
+
+            usklicnik(window_w * 0.05, lasers[i].y - 64)
+            usklicnik(window_w - window_w * 0.05, lasers[i].y - 64)
+        }
     }
 }
 
