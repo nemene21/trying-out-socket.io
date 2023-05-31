@@ -121,8 +121,8 @@ function rectangle(x, y, w, h, color = "black") {
 }
 
 function usklicnik(x, y, w, h, color="#FFFFFF") {
-    rectangle(x, y - h * 0.33, w, h * 0.66)
-    rectangle(x, y + h * 0.5,  w, w)
+    rectangle(x, y - h * 0.33, w, h * 0.66, color)
+    rectangle(x, y + h * 0.5,  w, w, color)
 }
 
 function color(r, g, b, a = 1) {
