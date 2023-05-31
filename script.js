@@ -113,7 +113,7 @@ function clear(color = "black") {
     ctx.fill()
 }
 
-function rectange(x, y, w, h, color = "black") {
+function rectangle(x, y, w, h, color = "black") {
     ctx.beginPath()
     ctx.rect(x - w * 0.5, y - h * 0.5, w, h)
     ctx.fillStyle = color
@@ -275,9 +275,9 @@ function draw() {
     // Draw lasers
     for (let i = 0; i < lasers.length; i++) {
         if (lasers[i].lf < 7)
-            rectange(window_w * 0.5, lasers[i].y, window_w, Math.sin(lasers[i].lf / 7 * 3.14) * 32, "#FFFFFF")
+            rectangle(window_w * 0.5, lasers[i].y, window_w, Math.sin(lasers[i].lf / 7 * 3.14) * 32, "#FFFFFF")
         else {
-            rectange(window_w * 0.5, lasers[i].y, window_w, Math.sin((lasers[i].lf - 7) / 3 * 3.14) * 6, "#FFFFFF")
+            rectangle(window_w * 0.5, lasers[i].y, window_w, Math.sin((lasers[i].lf - 7) / 3 * 3.14) * 6, "#FFFFFF")
 
             usklicnik(window_w * 0.05, lasers[i].y - 64, 16, 64)
             usklicnik(window_w - window_w * 0.05, lasers[i].y - 64, 16, 64)
