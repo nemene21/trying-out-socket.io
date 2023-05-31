@@ -10,7 +10,7 @@ if (username.length > 12) {
     username = username.slice(0, 12)
 }
 
-const socket = io("https://school-project-lh8g.onrender.com", { transports : ['websocket'] });
+const socket = io("https://school-project-lh8g.onrender.com", { transports: ['websocket'] });
 const FPS = 60
 
 let fps_counter = document.getElementById("fps_counter")
@@ -23,32 +23,32 @@ canvas.style.width = "60%"
 alert("Okreni mobitel")
 
 let delta = 0
-let time  = 0
+let time = 0
 let last_time = Date.now()
 
 const res = [1024, 600]
 const window_w = res[0]
 const window_h = res[1]
 
-function arrayRemove(arr, value) { 
-    
-    return arr.filter(function(ele){ 
-        return ele != value; 
+function arrayRemove(arr, value) {
+
+    return arr.filter(function (ele) {
+        return ele != value;
     });
 }
 
 function calculate_delta() {
-    let now   = Date.now()
-    let diff  = now - last_time
+    let now = Date.now()
+    let diff = now - last_time
     last_time = now
 
-    delta =  diff * 0.001
+    delta = diff * 0.001
     if (delta > 0.1) {
         delta = 0.1
     }
 }
 
-function lerp(a, b, c) {return a + (b - a) * c}
+function lerp(a, b, c) { return a + (b - a) * c }
 
 function step() {
     calculate_delta()
@@ -69,7 +69,7 @@ function when_pressed(buttons, func) {
     }
 }
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener("keydown", function (event) {
     if (event.key in inputs) {
         inputs[event.key]()
     }
@@ -93,27 +93,27 @@ function triangle(x, y, width, height, color) {
 }
 
 ctx.font = "bolder 18px Arial"
-function text(x, y, str, color, size=18) {
+function text(x, y, str, color, size = 18) {
     ctx.textAlign = "center"
     ctx.font = "bolder " + size + "px Arial"
     ctx.fillStyle = color
     ctx.fillText(str, x, y)
 }
-function text_uncentered(x, y, str, color, size=18) {
+function text_uncentered(x, y, str, color, size = 18) {
     ctx.textAlign = "left"
     ctx.font = "bolder " + size + "px Arial"
     ctx.fillStyle = color
     ctx.fillText(str, x, y)
 }
 
-function clear(color="black") {
+function clear(color = "black") {
     ctx.beginPath()
     ctx.rect(0, 0, 1024, 600)
     ctx.fillStyle = color
     ctx.fill()
 }
 
-function rectange(x, y, w, h, color="black") {
+function rectange(x, y, w, h, color = "black") {
     ctx.beginPath()
     ctx.rect(x - w * 0.5, y - h * 0.5, w, h)
     ctx.fillStyle = color
@@ -134,7 +134,7 @@ function draw_particles() {
     }
 }
 
-function spawn_particle(x, y, r, lf, color, vel={x: 0, y: 0}) {
+function spawn_particle(x, y, r, lf, color, vel = { x: 0, y: 0 }) {
     let particle = {
         x: x, y: y, r: r,
         lf: lf,
@@ -148,7 +148,7 @@ function spawn_particle(x, y, r, lf, color, vel={x: 0, y: 0}) {
     socket.emit("spawn_particle", JSON.stringify(particle))
 }
 
-socket.on("spawn_external_particle", function(particle) {
+socket.on("spawn_external_particle", function (particle) {
     particles.push(JSON.parse(particle))
 })
 
@@ -165,10 +165,10 @@ function play_sound(path, pitch_random = 0.1, pitch = 1) {
     audio.mozPreservesPitch = false;
     audio.playbackRate = pitch + (Math.random() * 2 - 1) * pitch_random
     audio.play();
-    socket.emit("play_sound", {path: path, pitch: pitch, pitch_random: pitch_random})
+    socket.emit("play_sound", { path: path, pitch: pitch, pitch_random: pitch_random })
 }
 
-socket.on("play_external_sound", function(data) {
+socket.on("play_external_sound", function (data) {
     var audio = new Audio(data.path);
     audio.mozPreservesPitch = false;
     audio.playbackRate = data.pitch + (Math.random() * 2 - 1) * data.pitch_random
@@ -206,14 +206,14 @@ function process() {
         }
     }
 
-    leaderboard.sort(function(a, b) {return b[1] - a[1]})
+    leaderboard.sort(function (a, b) { return b[1] - a[1] })
 
     // Processing particles
     for (let i = particles.length - 1; i >= 0; i--) {
         particles[i].lf -= delta
 
         particles[i].x += particles[i].vel.x * delta
-        particles[i].y += particles[i].vel.y* delta
+        particles[i].y += particles[i].vel.y * delta
 
         if (particles[i].lf < 0) {
             particles = arrayRemove(particles, particles[i])
@@ -238,13 +238,13 @@ function draw() {
     }
 
     draw_particles()
-    
+
     for (let player in players) {
         players[player].draw()
         if (player == socket.id) {
             triangle(players[player].x, players[player].y - 48 + Math.sin(time * 10) * 10, 16, -16, players[player].color)
         }
-        
+
         text(players[player].x, players[player].y + 44, players[player].name, "#FFFFFF")
     }
 
@@ -264,10 +264,10 @@ function draw() {
 
     // Draw lasers
     for (let i = 0; i < lasers.length; i++) {
-        if (lasers[i].lf < 7) 
+        if (lasers[i].lf < 7)
             rectange(window_w * 0.5, lasers[i].y, window_w, Math.sin(lasers[i].lf / 7 * 3.14) * 32, "#FFFFFF")
         else
-            rectange(window_w * 0.5, lasers[i].y, window_w, 6, "#FFFFFF")
+            rectange(window_w * 0.5, lasers[i].y, window_w, Math.sin((lasers[i].lf - 7) / 3 * 3.14) * 6, "#FFFFFF")
     }
 }
 
@@ -275,7 +275,7 @@ clear()
 
 const RESPAWN_TIME = 5
 
-socket.on("got_point", function() { players[socket.id].score += 1 })
+socket.on("got_point", function () { players[socket.id].score += 1 })
 
 // Player logic
 class Player {
@@ -283,7 +283,7 @@ class Player {
         this.x = x; this.y = y
         this.color = color
         this.scale = 0
-        this.vel = {x: 250, y: 0}
+        this.vel = { x: 250, y: 0 }
         this.particle_timer = 0.02
         this.flash = 0
         this.dead = false
@@ -313,7 +313,7 @@ class Player {
             play_sound("sounds/respawn.wav")
         }
 
-        if (this.dead) {this.respawn_timer -= delta; return}
+        if (this.dead) { this.respawn_timer -= delta; return }
 
         this.i_frame -= delta
 
@@ -334,7 +334,7 @@ class Player {
                 4 + Math.random() * 4,
                 0.5 * Math.random() + 0.1,
                 this.color,
-                {x: this.vel.x * 0.1, y: this.vel.y * 0.1}
+                { x: this.vel.x * 0.1, y: this.vel.y * 0.1 }
             )
             this.particle_timer = 0.05
         }
@@ -399,11 +399,11 @@ class Player {
     try_collision(key, other) {
         if (this.i_frame > 0) return
 
-        let dif = {x: other.x - this.x, y: other.y - this.y}
+        let dif = { x: other.x - this.x, y: other.y - this.y }
         let len = Math.sqrt(dif.x * dif.x + dif.y * dif.y)
 
         if (len < 40 && !other.dead && other.first_moved && this.first_moved) {
-            socket.emit("hit_player", {key: key, other: this, dif: dif})
+            socket.emit("hit_player", { key: key, other: this, dif: dif })
 
             this.collide(dif, other)
         }
@@ -442,7 +442,7 @@ class Player {
     }
 
     draw() {
-        if (this.dead) {return}
+        if (this.dead) { return }
 
         if (this.flash < 0) {
             if (this.first_moved) {
@@ -472,7 +472,7 @@ function jump() {
     }
 }
 
-socket.on("got_hit", function(data) {
+socket.on("got_hit", function (data) {
     data.dif.x *= -1
     data.dif.y *= -1
     local_player.collide(data.dif, data.other)
@@ -483,26 +483,26 @@ document.getElementsByTagName("html")[0].addEventListener("touchstart", jump)
 
 let local_player
 
-socket.on("update_player", function(data) {
+socket.on("update_player", function (data) {
     data = JSON.parse(data)
     players[data.id].lerp_x = data.x
     players[data.id].lerp_y = data.y
     players[data.id].lerp_scale = data.scale
     players[data.id].color = data.color
     players[data.id].flash = data.flash
-    players[data.id].dead  = data.dead
+    players[data.id].dead = data.dead
     players[data.id].first_moved = data.first_moved
     players[data.id].score = data.score
 })
 
-socket.on("create_local_player", function(color) {
+socket.on("create_local_player", function (color) {
     players = {}
     local_player = new Player(Math.random() * window_w, window_h * 0.5, color, username)
     players[socket.id] = local_player
-    socket.emit("local_player_created", {x: local_player.x, y: local_player.y, color: local_player.color, name: username})
+    socket.emit("local_player_created", { x: local_player.x, y: local_player.y, color: local_player.color, name: username })
 })
 
-socket.on("sync_other_players", function(data) {
+socket.on("sync_other_players", function (data) {
     data = JSON.parse(data)
     for (let i in data) {
         let new_player = data[i]
@@ -510,22 +510,22 @@ socket.on("sync_other_players", function(data) {
     }
 })
 
-socket.on("player_joined", function(data) {
+socket.on("player_joined", function (data) {
     players[data.id] = new Player(data.x, data.y, data.color, data.name)
     console.log("new guy joined!")
-}) 
+})
 
-socket.on("spawn_laser", function(y) {
+socket.on("spawn_laser", function (y) {
     play_sound_locally("sounds/laser_spawn.wav")
 })
 
 let lasers = []
-socket.on("update_lasers", function(new_lasers) {
+socket.on("update_lasers", function (new_lasers) {
     lasers = JSON.parse(new_lasers)
 })
 
-socket.on("player_left", function(id) {
-    delete(players[id])
+socket.on("player_left", function (id) {
+    delete (players[id])
     console.log("guy left :(")
 })
 
