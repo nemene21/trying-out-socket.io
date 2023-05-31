@@ -65,7 +65,7 @@ io.on("connection", function(socket) {
     })
 })
 
-let lasers = {}
+let lasers = []
 function spawn_laser() {
     io.emit("spawn_laser")
 
@@ -77,4 +77,4 @@ function spawn_laser() {
 }
 
 setTimeout(spawn_laser, (Math.random() * 10 + 4) * 1000)
-setTimeout(function() {io.emit("update_lasers", JSON.stringify(lasers))}, 0)
+setInterval(function() {io.emit("update_lasers", JSON.stringify(lasers))}, 0)
