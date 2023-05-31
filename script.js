@@ -279,8 +279,8 @@ function draw() {
         else {
             rectange(window_w * 0.5, lasers[i].y, window_w, Math.sin((lasers[i].lf - 7) / 3 * 3.14) * 6, "#FFFFFF")
 
-            usklicnik(window_w * 0.05, lasers[i].y - 64)
-            usklicnik(window_w - window_w * 0.05, lasers[i].y - 64)
+            usklicnik(window_w * 0.05, lasers[i].y - 64, 16, 64)
+            usklicnik(window_w - window_w * 0.05, lasers[i].y - 64, 16, 64)
         }
     }
 }
