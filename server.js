@@ -77,7 +77,7 @@ function spawn_laser() {
 
     lasers.push({
         y: Math.random() * 500 + 50,
-        lf: 5
+        lf: 10
     })
 
     setTimeout(spawn_laser, (Math.random() * 10 + 4) * 1000)

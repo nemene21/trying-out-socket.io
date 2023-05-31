@@ -264,7 +264,10 @@ function draw() {
 
     // Draw lasers
     for (let i = 0; i < lasers.length; i++) {
-        rectange(window_w * 0.5, lasers[i].y, window_w, Math.sin(lasers[i].lf / 5 * 3.14) * 32, "#FFFFFF")
+        if (laser[i].lf < 7) 
+            rectange(window_w * 0.5, lasers[i].y, window_w, Math.sin(lasers[i].lf / 7 * 3.14) * 32, "#FFFFFF")
+        else
+            rectange(window_w * 0.5, lasers[i].y, window_w, 6, "#FFFFFF")
     }
 }
 
