@@ -202,7 +202,7 @@ function process() {
             }
 
             for (let i = 0; i < lasers.length; i++) {
-                if (Math.abs(local_player.y - lasers[i].y) < 10 && lasers[i].lf < 7 && !local_player.first_moved)
+                if (Math.abs(local_player.y - lasers[i].y) < 10 && lasers[i].lf < 7 && local_player.first_moved)
                     local_player.die(Number(local_player.vel.y > 0) * 2 - 1)
             }
 

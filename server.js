@@ -80,10 +80,10 @@ function spawn_laser() {
         lf: 10
     })
 
-    setTimeout(spawn_laser, (Math.random() * 10 + 4) * 1000)
+    setTimeout(spawn_laser, (Math.random() * 12 + 6) * 1000)
 }
 
-setTimeout(spawn_laser, (Math.random() * 10 + 4) * 1000)
+setTimeout(spawn_laser, (Math.random() * 12 + 6) * 1000)
 setInterval(function() {
     for (let i = lasers.length - 1; i >= 0; i--) {
         lasers[i].lf -= 1 / 60
