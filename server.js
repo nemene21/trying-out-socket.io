@@ -65,16 +65,33 @@ io.on("connection", function(socket) {
     })
 })
 
+function arrayRemove(arr, value) { 
+    return arr.filter(function(ele){ 
+        return ele != value; 
+    });
+}
+
 let lasers = []
 function spawn_laser() {
     io.emit("spawn_laser")
 
     lasers.push({
-        y: Math.random() * 500 + 50
+        y: Math.random() * 500 + 50,
+        lf: 5
     })
 
     setTimeout(spawn_laser, (Math.random() * 10 + 4) * 1000)
 }
 
 setTimeout(spawn_laser, (Math.random() * 10 + 4) * 1000)
-setInterval(function() {io.emit("update_lasers", JSON.stringify(lasers))}, 0)
+setInterval(function() {
+    for (let i = lasers.length - 1; i >= 0; i--) {
+        lasers[i].lf -= 1 / 60
+
+        if (lasers[i].lf < 0) {
+            lasers = arrayRemove(lasers, lasers[i])
+        }
+    }
+
+    io.emit("update_lasers", JSON.stringify(lasers))
+}, 1000 / 60)

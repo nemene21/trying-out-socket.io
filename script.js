@@ -261,6 +261,11 @@ function draw() {
         height_offset = Math.sin(time * 10 + i) * 12
         triangle(snippet * (i + 0.5), 16 + height_offset * 0.5, snippet, -32 - height_offset, "#FFFFFF")
     }
+
+    // Draw lasers
+    for (let i = 0; i < lasers.length; i++) {
+        rectange(window_w * 0.5, lasers[i].y, window_w, Math.sin(lasers[i].lf / 5 * 3.14) * 32, "#FFFFFF")
+    }
 }
 
 clear()
