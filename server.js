@@ -77,4 +77,4 @@ function spawn_laser() {
 }
 
 setTimeout(spawn_laser, (Math.random() * 10 + 4) * 1000)
-setTimeout(function() {io.emit("update_lasers", JSON.stringify(lasers))})
+setTimeout(function() {io.emit("update_lasers", JSON.stringify(lasers))}, 0)
