@@ -207,8 +207,8 @@ function process() {
             }
 
             for (let i = 0; i < lasers.length; i++) {
-                if (Math.abs(local_player.y - lasers[i].y) < 10 && lasers[i].lf < 7 && local_player.first_moved)
-                    local_player.die(Number(local_player.vel.y > 0) * 2 - 1)
+                if (Math.abs(local_player.y - lasers[i].y) < 26 && lasers[i].lf < 7 && local_player.first_moved)
+                    local_player.die(Number(local_player.vel.y < 0) * 2 - 1)
             }
 
         } else {
@@ -279,8 +279,13 @@ function draw() {
         else {
             rectangle(window_w * 0.5, lasers[i].y, window_w, Math.sin((lasers[i].lf - 7) / 3 * 3.14) * 6, "#FFFFFF")
 
-            usklicnik(window_w * 0.05, lasers[i].y - 64, 16, 64)
-            usklicnik(window_w - window_w * 0.05, lasers[i].y - 64, 16, 64)
+            let anim = (lasers[i].lf - 7)
+            let num = Math.sin(anim * anim * anim * anim)
+
+            if (num > 0) {
+                usklicnik(window_w * 0.05, lasers[i].y - 48, 12, 48)
+                usklicnik(window_w - window_w * 0.05, lasers[i].y - 48, 12, 48)
+            }
         }
     }
 }
