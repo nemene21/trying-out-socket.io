@@ -511,6 +511,11 @@ socket.on("spawn_laser", function(y) {
     play_sound_locally("sounds/laser_spawn.wav")
 })
 
+let lasers = []
+socket.on("update_lasers", function(new_lasers) {
+    lasers = JSON.parse(new_lasers)
+})
+
 socket.on("player_left", function(id) {
     delete(players[id])
     console.log("guy left :(")
