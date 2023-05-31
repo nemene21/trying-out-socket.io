@@ -280,7 +280,7 @@ function draw() {
             rectangle(window_w * 0.5, lasers[i].y, window_w, Math.sin((lasers[i].lf - 7) / 3 * 3.14) * 6, "#FFFFFF")
 
             let anim = (lasers[i].lf - 7)
-            let num = Math.sin(anim * anim * anim * anim)
+            let num = Math.sin((3 * 3 * 3 * 3) - anim * anim * anim * anim)
 
             if (num > 0) {
                 usklicnik(window_w * 0.05, lasers[i].y - 48, 12, 48)
