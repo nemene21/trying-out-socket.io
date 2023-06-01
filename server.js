@@ -80,7 +80,7 @@ function spawn_laser() {
         lf: 10
     })
 
-    setTimeout(spawn_laser, (Math.random() * 12 + 6) * 1000)
+    setTimeout(spawn_laser, (Math.random() * 14 + 7) * 1000)
 }
 
 setTimeout(spawn_laser, (Math.random() * 12 + 6) * 1000)
