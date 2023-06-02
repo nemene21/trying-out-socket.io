@@ -35,7 +35,7 @@ Klijenti autonomno šalju informacije o svojoj poziciji, bodovima i animaciji se
 ## Server
 Održavanje servera je također veliki problem kod izrade online video igara te velike kompanije troše jako puno novca kako bi njihovi serveri preformirali što bolje. Na sreću, danas ima puno ljudi koji nude takvu uslugu besplatno te sam našao stranicu "https://render.com/" na kojoj ima besplatni plan za održavanje servera! Server se također nalazi relativno blizu, u Frankfurtu (oko 900km od Zagreba).
 ## Nešto više o izradi
-Video igra i njene grafike su vrlo jednostavne jer je naglasak bio na *networkingu*. Projekt sadrži 700 linija koda koji se može naći na linku "https://github.com/nemene21/trying-out-socket.io", a zvučni efekti napravljeni su uz pomoć programa bfxr - "https://www.bfxr.net/". Grafike su nacrtane na ekran uz pomoć *html canvas elementa* te njegovih funkcija za manipulaciju konteksta u kojem su grafike nacrtane.
+Video igra i njene grafike su vrlo jednostavne jer je naglasak bio na *networkingu*. Projekt sadrži 700 linija koda, a zvučni efekti napravljeni su uz pomoć programa bfxr - "https://www.bfxr.net/". Grafike su nacrtane na ekran uz pomoću *html canvas elementa* te njegovih funkcija za manipulaciju konteksta u kojem su grafike nacrtane.
 ```js
 // Funkcija za crtanje kruga
 function circle(x, y, radius, color) {
