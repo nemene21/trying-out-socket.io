@@ -21,7 +21,8 @@ Socket.io koristi TCP protokol za razmjenu informacija između klijenta i server
 
 Povezivanje klijenta na Socket.io server je začuđujuće lako:
 ```js
-const socket = io("https://school-project-lh8g.onrender.com"{     transports: ['websocket']
+const socket = io("adresa.com", {
+    transports: ['websocket']
 });
 ```
 A uspostavljivanje servera je još lakše:
