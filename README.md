@@ -16,8 +16,8 @@ Stranicu igre možete naći na linku "https://socket-io-project.netlify.app/" il
 
 ![QR-kod](qr_kod.png)
 
-## Socket.io i UDP
-Socket.io koristi UDP protokol za razmjenu informacija između klijenta i servera. UDP protokol nije idealan za izradu video igara zato što on osigurava da informacije stižu na svoje mjesto što ih usporava, a za neke stvari kao npr. poziciju igrača ne trebamo imati 100% savršene informacije nego klijent može micati poziciju protivnika do najnovije poslane pozicije. No pošto je ovo školski projekt koji neće koristiti više od desetka ljudi, to je sasvim dovoljno.
+## Socket.io i TCP
+Socket.io koristi TCP protokol za razmjenu informacija između klijenta i servera. TCP protokol nije idealan za izradu video igara zato što on osigurava da informacije stižu na svoje mjesto što ih usporava, a za neke stvari kao npr. poziciju igrača ne trebamo imati 100% savršene informacije nego klijent može micati poziciju protivnika do najnovije poslane pozicije. Kada bi pokušali staviti nekakvu igru na tržište, trebali bi koristiti miks UDP i TCP protokola radi optimalne komunikacije među klijenta i servera, stvari kao pozicija igrača mogu koristiti brži UDP protokol, a stvari koje moraju biti poslane poput ispaljenog metka ili završetka i početka igre mogu koristiti TCP protokol.
 
 Povezivanje klijenta na Socket.io server je začuđujuće lako:
 ```js
